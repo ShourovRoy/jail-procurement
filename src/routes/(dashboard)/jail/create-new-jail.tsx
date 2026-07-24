@@ -21,6 +21,7 @@ export const Route = createFileRoute("/(dashboard)/jail/create-new-jail")({
 });
 
 function RouteComponent() {
+  const { queryClient } = Route.useRouteContext();
   const jailForm = useForm({
     defaultValues: {
       name: "",
@@ -41,7 +42,16 @@ function RouteComponent() {
       if (res?.success) {
         toast.success(res.success.message);
 
+        // invalidate jails query cache and refetch
+        Promise.all([
+          queryClient.invalidateQueries({ queryKey: ["jails"] }),
+          queryClient.refetchQueries({
+            queryKey: ["jails"],
+          }),
+        ]);
+
         // reset the form field on success
+
         formApi.reset();
       }
     },

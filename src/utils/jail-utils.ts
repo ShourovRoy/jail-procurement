@@ -2,6 +2,7 @@
 
 import { GlobalRes } from "@/definitions/global-definition";
 import { JailsDataRes } from "@/definitions/jail-definitions";
+import { sleep } from "@/helpers/sleep-helper";
 import { invoke } from "@tauri-apps/api/core";
 
 // Create jail input interface
@@ -30,6 +31,8 @@ export const createJailCommand = async (
 export const getAllJailCommand = async (): Promise<
   GlobalRes<JailsDataRes | null>
 > => {
+  // artificial delay
+  await sleep(2000);
   const res = await invoke<GlobalRes<JailsDataRes>>(
     "view_all_lists_command",
   ).catch((err): GlobalRes<null> => {

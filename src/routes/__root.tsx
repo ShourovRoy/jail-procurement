@@ -1,8 +1,13 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { QueryClient } from "@tanstack/react-query";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { invoke } from "@tauri-apps/api/core";
 // import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+
+interface RouterContext {
+  queryClient: QueryClient;
+}
 
 const RootLayout = () => (
   <TooltipProvider>
@@ -12,7 +17,7 @@ const RootLayout = () => (
   </TooltipProvider>
 );
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootLayout,
   beforeLoad: async () => {
     const authSession: string | null =
