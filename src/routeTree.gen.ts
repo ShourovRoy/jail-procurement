@@ -13,11 +13,15 @@ import { Route as dashboardRouteRouteImport } from './routes/(dashboard)/route'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as dashboardIndexRouteImport } from './routes/(dashboard)/index'
 import { Route as dashboardJailRouteRouteImport } from './routes/(dashboard)/jail/route'
+import { Route as dashboardOrganizationRouteRouteImport } from './routes/(dashboard)/organization/route'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as dashboardJailIndexRouteImport } from './routes/(dashboard)/jail/index'
 import { Route as dashboardJailCreateNewJailRouteImport } from './routes/(dashboard)/jail/create-new-jail'
 import { Route as dashboardJailViewAllJailsRouteImport } from './routes/(dashboard)/jail/view-all-jails'
+import { Route as dashboardOrganizationIndexRouteImport } from './routes/(dashboard)/organization/index'
+import { Route as dashboardOrganizationCreateNewOrganizationRouteImport } from './routes/(dashboard)/organization/create-new-organization'
+import { Route as dashboardOrganizationViewAllOrganizationsRouteImport } from './routes/(dashboard)/organization/view-all-organizations'
 
 const dashboardRouteRoute = dashboardRouteRouteImport.update({
   id: '/(dashboard)',
@@ -38,6 +42,12 @@ const dashboardJailRouteRoute = dashboardJailRouteRouteImport.update({
   path: '/jail',
   getParentRoute: () => dashboardRouteRoute,
 } as any)
+const dashboardOrganizationRouteRoute =
+  dashboardOrganizationRouteRouteImport.update({
+    id: '/organization',
+    path: '/organization',
+    getParentRoute: () => dashboardRouteRoute,
+  } as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -65,16 +75,38 @@ const dashboardJailViewAllJailsRoute =
     path: '/view-all-jails',
     getParentRoute: () => dashboardJailRouteRoute,
   } as any)
+const dashboardOrganizationIndexRoute =
+  dashboardOrganizationIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => dashboardOrganizationRouteRoute,
+  } as any)
+const dashboardOrganizationCreateNewOrganizationRoute =
+  dashboardOrganizationCreateNewOrganizationRouteImport.update({
+    id: '/create-new-organization',
+    path: '/create-new-organization',
+    getParentRoute: () => dashboardOrganizationRouteRoute,
+  } as any)
+const dashboardOrganizationViewAllOrganizationsRoute =
+  dashboardOrganizationViewAllOrganizationsRouteImport.update({
+    id: '/view-all-organizations',
+    path: '/view-all-organizations',
+    getParentRoute: () => dashboardOrganizationRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/jail': typeof dashboardJailRouteRouteWithChildren
+  '/organization': typeof dashboardOrganizationRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/': typeof dashboardIndexRoute
   '/jail/create-new-jail': typeof dashboardJailCreateNewJailRoute
   '/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
+  '/organization/create-new-organization': typeof dashboardOrganizationCreateNewOrganizationRoute
+  '/organization/view-all-organizations': typeof dashboardOrganizationViewAllOrganizationsRoute
   '/jail/': typeof dashboardJailIndexRoute
+  '/organization/': typeof dashboardOrganizationIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
@@ -83,31 +115,42 @@ export interface FileRoutesByTo {
   '/': typeof dashboardIndexRoute
   '/jail/create-new-jail': typeof dashboardJailCreateNewJailRoute
   '/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
+  '/organization/create-new-organization': typeof dashboardOrganizationCreateNewOrganizationRoute
+  '/organization/view-all-organizations': typeof dashboardOrganizationViewAllOrganizationsRoute
   '/jail': typeof dashboardJailIndexRoute
+  '/organization': typeof dashboardOrganizationIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(dashboard)': typeof dashboardRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/(dashboard)/jail': typeof dashboardJailRouteRouteWithChildren
+  '/(dashboard)/organization': typeof dashboardOrganizationRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/(dashboard)/': typeof dashboardIndexRoute
   '/(dashboard)/jail/create-new-jail': typeof dashboardJailCreateNewJailRoute
   '/(dashboard)/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
+  '/(dashboard)/organization/create-new-organization': typeof dashboardOrganizationCreateNewOrganizationRoute
+  '/(dashboard)/organization/view-all-organizations': typeof dashboardOrganizationViewAllOrganizationsRoute
   '/(dashboard)/jail/': typeof dashboardJailIndexRoute
+  '/(dashboard)/organization/': typeof dashboardOrganizationIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/auth'
     | '/jail'
+    | '/organization'
     | '/auth/login'
     | '/auth/signup'
     | '/'
     | '/jail/create-new-jail'
     | '/jail/view-all-jails'
+    | '/organization/create-new-organization'
+    | '/organization/view-all-organizations'
     | '/jail/'
+    | '/organization/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -116,18 +159,25 @@ export interface FileRouteTypes {
     | '/'
     | '/jail/create-new-jail'
     | '/jail/view-all-jails'
+    | '/organization/create-new-organization'
+    | '/organization/view-all-organizations'
     | '/jail'
+    | '/organization'
   id:
     | '__root__'
     | '/(dashboard)'
     | '/auth'
     | '/(dashboard)/jail'
+    | '/(dashboard)/organization'
     | '/auth/login'
     | '/auth/signup'
     | '/(dashboard)/'
     | '/(dashboard)/jail/create-new-jail'
     | '/(dashboard)/jail/view-all-jails'
+    | '/(dashboard)/organization/create-new-organization'
+    | '/(dashboard)/organization/view-all-organizations'
     | '/(dashboard)/jail/'
+    | '/(dashboard)/organization/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -165,6 +215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardJailRouteRouteImport
       parentRoute: typeof dashboardRouteRoute
     }
+    '/(dashboard)/organization': {
+      id: '/(dashboard)/organization'
+      path: '/organization'
+      fullPath: '/organization'
+      preLoaderRoute: typeof dashboardOrganizationRouteRouteImport
+      parentRoute: typeof dashboardRouteRoute
+    }
     '/auth/login': {
       id: '/auth/login'
       path: '/login'
@@ -200,6 +257,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardJailViewAllJailsRouteImport
       parentRoute: typeof dashboardJailRouteRoute
     }
+    '/(dashboard)/organization/': {
+      id: '/(dashboard)/organization/'
+      path: '/'
+      fullPath: '/organization/'
+      preLoaderRoute: typeof dashboardOrganizationIndexRouteImport
+      parentRoute: typeof dashboardOrganizationRouteRoute
+    }
+    '/(dashboard)/organization/create-new-organization': {
+      id: '/(dashboard)/organization/create-new-organization'
+      path: '/create-new-organization'
+      fullPath: '/organization/create-new-organization'
+      preLoaderRoute: typeof dashboardOrganizationCreateNewOrganizationRouteImport
+      parentRoute: typeof dashboardOrganizationRouteRoute
+    }
+    '/(dashboard)/organization/view-all-organizations': {
+      id: '/(dashboard)/organization/view-all-organizations'
+      path: '/view-all-organizations'
+      fullPath: '/organization/view-all-organizations'
+      preLoaderRoute: typeof dashboardOrganizationViewAllOrganizationsRouteImport
+      parentRoute: typeof dashboardOrganizationRouteRoute
+    }
   }
 }
 
@@ -218,13 +296,35 @@ const dashboardJailRouteRouteChildren: dashboardJailRouteRouteChildren = {
 const dashboardJailRouteRouteWithChildren =
   dashboardJailRouteRoute._addFileChildren(dashboardJailRouteRouteChildren)
 
+interface dashboardOrganizationRouteRouteChildren {
+  dashboardOrganizationCreateNewOrganizationRoute: typeof dashboardOrganizationCreateNewOrganizationRoute
+  dashboardOrganizationViewAllOrganizationsRoute: typeof dashboardOrganizationViewAllOrganizationsRoute
+  dashboardOrganizationIndexRoute: typeof dashboardOrganizationIndexRoute
+}
+
+const dashboardOrganizationRouteRouteChildren: dashboardOrganizationRouteRouteChildren =
+  {
+    dashboardOrganizationCreateNewOrganizationRoute:
+      dashboardOrganizationCreateNewOrganizationRoute,
+    dashboardOrganizationViewAllOrganizationsRoute:
+      dashboardOrganizationViewAllOrganizationsRoute,
+    dashboardOrganizationIndexRoute: dashboardOrganizationIndexRoute,
+  }
+
+const dashboardOrganizationRouteRouteWithChildren =
+  dashboardOrganizationRouteRoute._addFileChildren(
+    dashboardOrganizationRouteRouteChildren,
+  )
+
 interface dashboardRouteRouteChildren {
   dashboardJailRouteRoute: typeof dashboardJailRouteRouteWithChildren
+  dashboardOrganizationRouteRoute: typeof dashboardOrganizationRouteRouteWithChildren
   dashboardIndexRoute: typeof dashboardIndexRoute
 }
 
 const dashboardRouteRouteChildren: dashboardRouteRouteChildren = {
   dashboardJailRouteRoute: dashboardJailRouteRouteWithChildren,
+  dashboardOrganizationRouteRoute: dashboardOrganizationRouteRouteWithChildren,
   dashboardIndexRoute: dashboardIndexRoute,
 }
 

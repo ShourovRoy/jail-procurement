@@ -33,17 +33,17 @@ const data = {
     // organization management
     {
       title: "Organization",
-      url: "#",
+      url: "/organization",
       icon: <TerminalSquareIcon />,
       isActive: false,
       items: [
         {
           title: "Create Organization",
-          url: "#",
+          url: "/organization/create-new-organization",
         },
         {
           title: "All Organization",
-          url: "#",
+          url: "/organization/view-all-organizations",
         },
       ],
     },

@@ -58,6 +58,7 @@ pub fn run() {
             commands::auth_command::retrive_verify_auth_token,
             commands::jail_commands::create_new_jail_command,
             commands::jail_commands::view_all_lists_command,
+            commands::organization_commands::create_organization_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
