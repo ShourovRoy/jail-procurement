@@ -14,6 +14,7 @@ import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as dashboardIndexRouteImport } from './routes/(dashboard)/index'
 import { Route as dashboardJailRouteRouteImport } from './routes/(dashboard)/jail/route'
 import { Route as dashboardOrganizationRouteRouteImport } from './routes/(dashboard)/organization/route'
+import { Route as dashboardTendersRouteRouteImport } from './routes/(dashboard)/tenders/route'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as dashboardJailIndexRouteImport } from './routes/(dashboard)/jail/index'
@@ -22,6 +23,8 @@ import { Route as dashboardJailViewAllJailsRouteImport } from './routes/(dashboa
 import { Route as dashboardOrganizationIndexRouteImport } from './routes/(dashboard)/organization/index'
 import { Route as dashboardOrganizationCreateNewOrganizationRouteImport } from './routes/(dashboard)/organization/create-new-organization'
 import { Route as dashboardOrganizationViewAllOrganizationsRouteImport } from './routes/(dashboard)/organization/view-all-organizations'
+import { Route as dashboardTendersIndexRouteImport } from './routes/(dashboard)/tenders/index'
+import { Route as dashboardTendersCreateNewTenderRouteImport } from './routes/(dashboard)/tenders/create-new-tender'
 
 const dashboardRouteRoute = dashboardRouteRouteImport.update({
   id: '/(dashboard)',
@@ -48,6 +51,11 @@ const dashboardOrganizationRouteRoute =
     path: '/organization',
     getParentRoute: () => dashboardRouteRoute,
   } as any)
+const dashboardTendersRouteRoute = dashboardTendersRouteRouteImport.update({
+  id: '/tenders',
+  path: '/tenders',
+  getParentRoute: () => dashboardRouteRoute,
+} as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -93,11 +101,23 @@ const dashboardOrganizationViewAllOrganizationsRoute =
     path: '/view-all-organizations',
     getParentRoute: () => dashboardOrganizationRouteRoute,
   } as any)
+const dashboardTendersIndexRoute = dashboardTendersIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => dashboardTendersRouteRoute,
+} as any)
+const dashboardTendersCreateNewTenderRoute =
+  dashboardTendersCreateNewTenderRouteImport.update({
+    id: '/create-new-tender',
+    path: '/create-new-tender',
+    getParentRoute: () => dashboardTendersRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/jail': typeof dashboardJailRouteRouteWithChildren
   '/organization': typeof dashboardOrganizationRouteRouteWithChildren
+  '/tenders': typeof dashboardTendersRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/': typeof dashboardIndexRoute
@@ -105,8 +125,10 @@ export interface FileRoutesByFullPath {
   '/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
   '/organization/create-new-organization': typeof dashboardOrganizationCreateNewOrganizationRoute
   '/organization/view-all-organizations': typeof dashboardOrganizationViewAllOrganizationsRoute
+  '/tenders/create-new-tender': typeof dashboardTendersCreateNewTenderRoute
   '/jail/': typeof dashboardJailIndexRoute
   '/organization/': typeof dashboardOrganizationIndexRoute
+  '/tenders/': typeof dashboardTendersIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
@@ -117,8 +139,10 @@ export interface FileRoutesByTo {
   '/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
   '/organization/create-new-organization': typeof dashboardOrganizationCreateNewOrganizationRoute
   '/organization/view-all-organizations': typeof dashboardOrganizationViewAllOrganizationsRoute
+  '/tenders/create-new-tender': typeof dashboardTendersCreateNewTenderRoute
   '/jail': typeof dashboardJailIndexRoute
   '/organization': typeof dashboardOrganizationIndexRoute
+  '/tenders': typeof dashboardTendersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -126,6 +150,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/(dashboard)/jail': typeof dashboardJailRouteRouteWithChildren
   '/(dashboard)/organization': typeof dashboardOrganizationRouteRouteWithChildren
+  '/(dashboard)/tenders': typeof dashboardTendersRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/(dashboard)/': typeof dashboardIndexRoute
@@ -133,8 +158,10 @@ export interface FileRoutesById {
   '/(dashboard)/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
   '/(dashboard)/organization/create-new-organization': typeof dashboardOrganizationCreateNewOrganizationRoute
   '/(dashboard)/organization/view-all-organizations': typeof dashboardOrganizationViewAllOrganizationsRoute
+  '/(dashboard)/tenders/create-new-tender': typeof dashboardTendersCreateNewTenderRoute
   '/(dashboard)/jail/': typeof dashboardJailIndexRoute
   '/(dashboard)/organization/': typeof dashboardOrganizationIndexRoute
+  '/(dashboard)/tenders/': typeof dashboardTendersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -142,6 +169,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/jail'
     | '/organization'
+    | '/tenders'
     | '/auth/login'
     | '/auth/signup'
     | '/'
@@ -149,8 +177,10 @@ export interface FileRouteTypes {
     | '/jail/view-all-jails'
     | '/organization/create-new-organization'
     | '/organization/view-all-organizations'
+    | '/tenders/create-new-tender'
     | '/jail/'
     | '/organization/'
+    | '/tenders/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -161,14 +191,17 @@ export interface FileRouteTypes {
     | '/jail/view-all-jails'
     | '/organization/create-new-organization'
     | '/organization/view-all-organizations'
+    | '/tenders/create-new-tender'
     | '/jail'
     | '/organization'
+    | '/tenders'
   id:
     | '__root__'
     | '/(dashboard)'
     | '/auth'
     | '/(dashboard)/jail'
     | '/(dashboard)/organization'
+    | '/(dashboard)/tenders'
     | '/auth/login'
     | '/auth/signup'
     | '/(dashboard)/'
@@ -176,8 +209,10 @@ export interface FileRouteTypes {
     | '/(dashboard)/jail/view-all-jails'
     | '/(dashboard)/organization/create-new-organization'
     | '/(dashboard)/organization/view-all-organizations'
+    | '/(dashboard)/tenders/create-new-tender'
     | '/(dashboard)/jail/'
     | '/(dashboard)/organization/'
+    | '/(dashboard)/tenders/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -220,6 +255,13 @@ declare module '@tanstack/react-router' {
       path: '/organization'
       fullPath: '/organization'
       preLoaderRoute: typeof dashboardOrganizationRouteRouteImport
+      parentRoute: typeof dashboardRouteRoute
+    }
+    '/(dashboard)/tenders': {
+      id: '/(dashboard)/tenders'
+      path: '/tenders'
+      fullPath: '/tenders'
+      preLoaderRoute: typeof dashboardTendersRouteRouteImport
       parentRoute: typeof dashboardRouteRoute
     }
     '/auth/login': {
@@ -278,6 +320,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardOrganizationViewAllOrganizationsRouteImport
       parentRoute: typeof dashboardOrganizationRouteRoute
     }
+    '/(dashboard)/tenders/': {
+      id: '/(dashboard)/tenders/'
+      path: '/'
+      fullPath: '/tenders/'
+      preLoaderRoute: typeof dashboardTendersIndexRouteImport
+      parentRoute: typeof dashboardTendersRouteRoute
+    }
+    '/(dashboard)/tenders/create-new-tender': {
+      id: '/(dashboard)/tenders/create-new-tender'
+      path: '/create-new-tender'
+      fullPath: '/tenders/create-new-tender'
+      preLoaderRoute: typeof dashboardTendersCreateNewTenderRouteImport
+      parentRoute: typeof dashboardTendersRouteRoute
+    }
   }
 }
 
@@ -316,15 +372,32 @@ const dashboardOrganizationRouteRouteWithChildren =
     dashboardOrganizationRouteRouteChildren,
   )
 
+interface dashboardTendersRouteRouteChildren {
+  dashboardTendersCreateNewTenderRoute: typeof dashboardTendersCreateNewTenderRoute
+  dashboardTendersIndexRoute: typeof dashboardTendersIndexRoute
+}
+
+const dashboardTendersRouteRouteChildren: dashboardTendersRouteRouteChildren = {
+  dashboardTendersCreateNewTenderRoute: dashboardTendersCreateNewTenderRoute,
+  dashboardTendersIndexRoute: dashboardTendersIndexRoute,
+}
+
+const dashboardTendersRouteRouteWithChildren =
+  dashboardTendersRouteRoute._addFileChildren(
+    dashboardTendersRouteRouteChildren,
+  )
+
 interface dashboardRouteRouteChildren {
   dashboardJailRouteRoute: typeof dashboardJailRouteRouteWithChildren
   dashboardOrganizationRouteRoute: typeof dashboardOrganizationRouteRouteWithChildren
+  dashboardTendersRouteRoute: typeof dashboardTendersRouteRouteWithChildren
   dashboardIndexRoute: typeof dashboardIndexRoute
 }
 
 const dashboardRouteRouteChildren: dashboardRouteRouteChildren = {
   dashboardJailRouteRoute: dashboardJailRouteRouteWithChildren,
   dashboardOrganizationRouteRoute: dashboardOrganizationRouteRouteWithChildren,
+  dashboardTendersRouteRoute: dashboardTendersRouteRouteWithChildren,
   dashboardIndexRoute: dashboardIndexRoute,
 }
 

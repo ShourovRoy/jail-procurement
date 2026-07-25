@@ -35,8 +35,10 @@ sqlx = { version = "0.9.0", features = [
     "chrono",
     "bigdecimal",
     "json",
+    "rust_decimal",
 ] }
 tokio = { version = "1.52.3", features = ["full"] }
 jsonwebtoken = { version = "10.4.0", features = ["rust_crypto"] }
 tauri-plugin-store = "2"
 anyhow = "1.0.103"
+rust_decimal = { version = "1.42.1", features = ["serde-float"] }

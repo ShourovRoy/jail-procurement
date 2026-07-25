@@ -93,12 +93,12 @@ const data = {
     // tender management
     {
       title: "Tender Management",
-      url: "#",
+      url: "/tenders",
       icon: <BookOpenIcon />,
       items: [
         {
           title: "Create New Tender",
-          url: "#",
+          url: "/tenders/create-new-tender",
         },
         {
           title: "All Tenders",
