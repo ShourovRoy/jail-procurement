@@ -102,7 +102,7 @@ const data = {
         },
         {
           title: "All Tenders",
-          url: "#",
+          url: "/tenders/view-tenders",
         },
       ],
     },

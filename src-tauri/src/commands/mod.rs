@@ -4,3 +4,4 @@ pub mod login_command;
 pub mod organization_commands;
 pub mod signup_command;
 pub mod tender_commands;
+pub mod tender_participant_commands;

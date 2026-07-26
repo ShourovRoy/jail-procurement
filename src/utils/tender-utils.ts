@@ -22,3 +22,12 @@ export const createTenderCommand = async (
     return err;
   });
 };
+
+// query tender list
+export const queryTenderListCommand = async () => {
+  const res = invoke("tender_list_comamnd").catch((err) => {
+    return err;
+  });
+
+  console.log(res);
+};

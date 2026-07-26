@@ -5,9 +5,14 @@ use std::sync::Arc;
 use sqlx::PgPool;
 use tauri::Wry;
 use tauri_plugin_store::Store;
+use uuid::Uuid;
 
 use crate::{
-    domain::{inputs::tender_inputs::CreateTenderInputs, models::global_model::ErrorModel},
+    domain::{
+        inputs::tender_inputs::CreateTenderInputs,
+        models::{global_model::ErrorModel, tender_model::Tender},
+        responses::tender_responses::TenderListRes,
+    },
     helpers::token_helper::retrive_verify_user_helper,
 };
 
@@ -74,4 +79,39 @@ pub async fn create_new_tender_service(
 
     // return success message
     Ok("Tender has been created successfully!".to_string())
+}
+
+// query tender list service
+pub async fn query_tender_list_service(
+    db_pool: &PgPool,
+    auth_store: Arc<Store<Wry>>,
+    secret: &str,
+) -> Result<TenderListRes<Uuid, Uuid, String>, ErrorModel> {
+    // veryfiy auth token
+    retrive_verify_user_helper(auth_store, secret).await?;
+
+    // query the tenders
+    let q = "
+        SELECT 
+            t.id, t.jail_id, t.tender_number, t.notice_number, t.dropping_date, t.opening_date, t.estimated_amount, t.winner_participant_id, t.winner_bid_amount, t.status, t.remarks, u.username AS created_by, t.created_at, t.updated_at 
+        FROM tenders AS t
+        LEFT JOIN users AS u 
+            on t.created_by = u.id
+        ORDER BY t.created_at ASC;
+    ";
+
+    // query the tender list
+    let res = sqlx::query_as::<_, Tender<Uuid, Uuid, String>>(q)
+        .fetch_all(db_pool)
+        .await
+        .map_err(|err| {
+            dbg!(err);
+            ErrorModel {
+                error_message: "Unable to get the tenders list".to_string(),
+                status_code: 500,
+            }
+        })?;
+
+    // return response
+    Ok(TenderListRes { tenders: res })
 }
