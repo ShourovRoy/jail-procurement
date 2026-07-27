@@ -86,31 +86,34 @@ pub async fn query_tender_list_service(
     db_pool: &PgPool,
     auth_store: Arc<Store<Wry>>,
     secret: &str,
-) -> Result<TenderListRes<Uuid, Uuid, String>, ErrorModel> {
+) -> Result<TenderListRes<String, Uuid, String>, ErrorModel> {
     // veryfiy auth token
     retrive_verify_user_helper(auth_store, secret).await?;
 
     // query the tenders
     let q = "
         SELECT 
-            t.id, t.jail_id, t.tender_number, t.notice_number, t.dropping_date, t.opening_date, t.estimated_amount, t.winner_participant_id, t.winner_bid_amount, t.status, t.remarks, u.username AS created_by, t.created_at, t.updated_at 
+            t.id, t.jail_id, t.tender_number, t.notice_number, t.dropping_date, t.opening_date, t.estimated_amount, t.winner_participant_id, t.winner_bid_amount, t.status, t.remarks, u.username AS created_by, t.created_at, t.updated_at, j.name AS jail_id
         FROM tenders AS t
         LEFT JOIN users AS u 
-            on t.created_by = u.id
+            ON t.created_by = u.id
+        LEFT JOIN jails AS j
+            ON t.jail_id = j.id
         ORDER BY t.created_at ASC;
     ";
 
     // query the tender list
-    let res = sqlx::query_as::<_, Tender<Uuid, Uuid, String>>(q)
-        .fetch_all(db_pool)
-        .await
-        .map_err(|err| {
-            dbg!(err);
-            ErrorModel {
-                error_message: "Unable to get the tenders list".to_string(),
-                status_code: 500,
-            }
-        })?;
+    let res: Vec<Tender<String, Uuid, String>> =
+        sqlx::query_as::<_, Tender<String, Uuid, String>>(q)
+            .fetch_all(db_pool)
+            .await
+            .map_err(|err| {
+                dbg!(err);
+                ErrorModel {
+                    error_message: "Unable to get the tenders list".to_string(),
+                    status_code: 500,
+                }
+            })?;
 
     // return response
     Ok(TenderListRes { tenders: res })

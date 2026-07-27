@@ -55,7 +55,7 @@ pub async fn create_tender_comamnd(
 #[tauri::command]
 pub async fn tender_list_comamnd(
     app: AppHandle,
-) -> Result<GlobalRes<TenderListRes<Uuid, Uuid, String>, ()>, GlobalRes<(), ErrorModel>> {
+) -> Result<GlobalRes<TenderListRes<String, Uuid, String>, ()>, GlobalRes<(), ErrorModel>> {
     // app state
     let state = app.state::<AppState>();
 

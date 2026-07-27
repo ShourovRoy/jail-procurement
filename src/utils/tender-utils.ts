@@ -1,6 +1,7 @@
 // all tender related utils will be here
 
 import { GlobalRes } from "@/definitions/global-definition";
+import { TendersDataRes } from "@/definitions/tender-definitions";
 import { invoke } from "@tauri-apps/api/core";
 
 // tender creation input interface
@@ -24,10 +25,14 @@ export const createTenderCommand = async (
 };
 
 // query tender list
-export const queryTenderListCommand = async () => {
-  const res = invoke("tender_list_comamnd").catch((err) => {
+export const queryTenderListCommand = async (): Promise<
+  GlobalRes<TendersDataRes<string, string, string>>
+> => {
+  const res = invoke<GlobalRes<TendersDataRes<string, string, string>>>(
+    "tender_list_comamnd",
+  ).catch((err): GlobalRes<TendersDataRes<string, string, string>> => {
     return err;
   });
 
-  console.log(res);
+  return res;
 };

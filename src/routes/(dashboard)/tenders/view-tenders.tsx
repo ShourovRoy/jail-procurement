@@ -3,10 +3,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(dashboard)/tenders/view-tenders")({
   loader: async ({}) => {
-    await queryTenderListCommand();
+    const res = await queryTenderListCommand();
 
     return {
-      tenders: [],
+      tenders: res.success?.data?.tenders,
     };
   },
   component: RouteComponent,
@@ -16,14 +16,17 @@ function RouteComponent() {
   const { tenders } = Route.useLoaderData();
   return (
     <div>
-      <Link
-        to="/tenders/tender-details/$id"
-        params={{
-          id: "1",
-        }}
-      >
-        View Tender Details
-      </Link>
+      {tenders?.map((tender, index) => (
+        <Link
+          to="/tenders/tender-details/$id"
+          params={{
+            id: tender.id,
+          }}
+          key={tender.id || index}
+        >
+          {tender.jail_id}
+        </Link>
+      ))}
     </div>
   );
 }
