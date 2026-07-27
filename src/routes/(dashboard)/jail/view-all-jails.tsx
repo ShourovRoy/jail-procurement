@@ -1,5 +1,5 @@
-import { columns } from "@/components/data-tables/jails/columns";
-import { DataTable } from "@/components/data-tables/jails/data-table";
+import { jailColumns } from "@/components/data-tables/jails/jail-columns";
+import { JailDataTable } from "@/components/data-tables/jails/jail-data-table";
 import { getAllJailCommand } from "@/utils/jail-utils";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -25,7 +25,10 @@ function RouteComponent() {
   return (
     <div>
       <div className="container mx-auto py-10">
-        <DataTable columns={columns} data={data.success?.data?.jails!} />
+        <JailDataTable
+          columns={jailColumns}
+          data={data.success?.data?.jails!}
+        />
       </div>
     </div>
   );

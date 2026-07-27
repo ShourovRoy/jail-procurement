@@ -1,32 +1,43 @@
+import { tenderColumns } from "@/components/data-tables/tenders/tender-columns";
+import { TenderDataTable } from "@/components/data-tables/tenders/tender-data-table";
 import { queryTenderListCommand } from "@/utils/tender-utils";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { toast } from "sonner";
+
+// query jails
+const tendersQuery = queryOptions({
+  queryKey: ["tenders"],
+  queryFn: () => queryTenderListCommand(),
+});
 
 export const Route = createFileRoute("/(dashboard)/tenders/view-tenders")({
-  loader: async ({}) => {
-    const res = await queryTenderListCommand();
-
-    return {
-      tenders: res.success?.data?.tenders,
-    };
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(tendersQuery);
   },
+  pendingComponent: () => <p>Loading Tenders....</p>,
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { tenders } = Route.useLoaderData();
+  // getting tenders from cache
+  const { data, error } = useSuspenseQuery(tendersQuery);
+
+  // track and show error message if available
+  useEffect(() => {
+    // checking if error
+    if (error?.message) {
+      toast.error(error.message);
+    }
+  }, [error]);
+
   return (
     <div>
-      {tenders?.map((tender, index) => (
-        <Link
-          to="/tenders/tender-details/$id"
-          params={{
-            id: tender.id,
-          }}
-          key={tender.id || index}
-        >
-          {tender.jail_id}
-        </Link>
-      ))}
+      <TenderDataTable
+        columns={tenderColumns}
+        data={data.success?.data?.tenders!}
+      />
     </div>
   );
 }

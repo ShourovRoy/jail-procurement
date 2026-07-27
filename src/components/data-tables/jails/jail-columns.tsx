@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Jail } from "@/definitions/jail-definitions";
 
-export const columns: ColumnDef<Jail>[] = [
+export const jailColumns: ColumnDef<Jail>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => (
