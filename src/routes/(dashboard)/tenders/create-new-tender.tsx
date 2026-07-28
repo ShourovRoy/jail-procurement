@@ -14,7 +14,7 @@ import { InputFieldError } from "../jail/create-new-jail";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllJailCommand } from "@/utils/jail-utils";
 import {
   Select,
@@ -33,6 +33,8 @@ export const Route = createFileRoute("/(dashboard)/tenders/create-new-tender")({
 });
 
 function RouteComponent() {
+  const queryClient = useQueryClient();
+
   // query jails
   const { data, isLoading, error } = useQuery({
     queryKey: ["jails"],
@@ -60,13 +62,13 @@ function RouteComponent() {
       if (res?.success) {
         toast.success(res.success.message);
 
-        // TODO:// invalidate tenders query cache and refetch
-        // Promise.all([
-        //   queryClient.invalidateQueries({ queryKey: ["jails"] }),
-        //   queryClient.refetchQueries({
-        //     queryKey: ["jails"],
-        //   }),
-        // ]);
+        // invalidate tenders query cache and refetch
+        Promise.all([
+          queryClient.invalidateQueries({ queryKey: ["tenders"] }),
+          queryClient.refetchQueries({
+            queryKey: ["tenders"],
+          }),
+        ]);
 
         // reset the form field on success
 

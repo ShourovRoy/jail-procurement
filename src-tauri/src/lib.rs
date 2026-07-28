@@ -59,6 +59,7 @@ pub fn run() {
             commands::jail_commands::create_new_jail_command,
             commands::jail_commands::view_all_lists_command,
             commands::organization_commands::create_organization_command,
+            commands::organization_commands::filter_organization_list_command,
             commands::tender_commands::create_tender_comamnd,
             commands::tender_commands::tender_list_comamnd,
             commands::tender_participant_commands::add_participant_command,

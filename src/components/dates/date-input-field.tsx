@@ -1,9 +1,6 @@
-"use client";
-
+// components/date-picker-field.tsx
 import * as React from "react";
 import { CalendarIcon } from "lucide-react";
-import type { AnyFieldApi } from "@tanstack/react-form";
-
 import { Calendar } from "@/components/ui/calendar";
 import { Field, FieldLabel } from "@/components/ui/field";
 import {
@@ -17,57 +14,56 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { formatDate, isValidDate } from "@/helpers/date-helper";
+import { InputFieldError } from "@/components/error-fields/input-error-field";
 
-function formatDate(date: Date | undefined) {
-  if (!date) {
-    return "";
-  }
+type Props = {
+  field: any; // swap for your FieldApi<...> generic if you have it
+  label: string;
+  placeholder?: string;
+};
 
-  return date.toLocaleDateString("en-US", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
-}
-
-function isValidDate(date: Date | undefined) {
-  if (!date) {
-    return false;
-  }
-  return !isNaN(date.getTime());
-}
-
-export function DatePickerInput({
+export function DatePickerField({
   field,
   label,
-}: {
-  field: AnyFieldApi;
-  label: string;
-}) {
+  placeholder = "June 01, 2025",
+}: Props) {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(
-    new Date("2025-06-01"),
-  );
-  const [month, setMonth] = React.useState<Date | undefined>(date);
-  const [value, setValue] = React.useState(formatDate(date));
+
+  // field.state.value is the source of truth: an ISO string or ""
+  const selectedDate = field.state.value
+    ? new Date(field.state.value)
+    : undefined;
+
+  const [month, setMonth] = React.useState<Date | undefined>(selectedDate);
+  const [textValue, setTextValue] = React.useState(formatDate(selectedDate)); // human-readable display
+
+  // keep the visible text synced if the field value ever changes from outside (e.g. form.reset)
+  React.useEffect(() => {
+    const d = field.state.value ? new Date(field.state.value) : undefined;
+    setTextValue(formatDate(d));
+    if (d) setMonth(d);
+  }, [field.state.value]);
 
   return (
-    <Field className="mx-auto w-48">
+    <Field>
       <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
       <InputGroup>
         <InputGroupInput
           id={field.name}
-          value={value}
-          placeholder="June 01, 2025"
+          value={textValue}
+          placeholder={placeholder}
+          onBlur={field.handleBlur}
           onChange={(e) => {
-            const date = new Date(e.target.value);
-            setValue(e.target.value);
-            console.log(date);
-            if (isValidDate(date)) {
-              setDate(date);
-              setMonth(date);
-              field.handleChange(e.target.value);
+            const typed = e.target.value;
+            setTextValue(typed); // let them type freely
+
+            const parsed = new Date(typed);
+            if (isValidDate(parsed)) {
+              field.handleChange(parsed.toISOString()); // only commit to form when valid
+              setMonth(parsed);
             }
+            // if invalid/partial, don't touch field.state.value — avoids the toISOString() crash
           }}
           onKeyDown={(e) => {
             if (e.key === "ArrowDown") {
@@ -80,10 +76,9 @@ export function DatePickerInput({
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <InputGroupButton
-                id="date-picker"
                 variant="ghost"
                 size="icon-xs"
-                aria-label="Select date"
+                aria-label={`Select ${label.toLowerCase()}`}
               >
                 <CalendarIcon />
                 <span className="sr-only">Select date</span>
@@ -97,12 +92,15 @@ export function DatePickerInput({
             >
               <Calendar
                 mode="single"
-                selected={date}
+                selected={selectedDate}
                 month={month}
                 onMonthChange={setMonth}
                 onSelect={(date) => {
-                  setDate(date);
-                  setValue(formatDate(date));
+                  if (date) {
+                    field.handleChange(date.toISOString()); // ✅ this was missing — the actual bug
+                    setTextValue(formatDate(date));
+                    setMonth(date);
+                  }
                   setOpen(false);
                 }}
               />
@@ -110,6 +108,7 @@ export function DatePickerInput({
           </Popover>
         </InputGroupAddon>
       </InputGroup>
+      <InputFieldError field={field} />
     </Field>
   );
 }

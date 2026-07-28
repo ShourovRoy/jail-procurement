@@ -7,7 +7,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tender } from "@/definitions/tender-definitions";
@@ -88,7 +87,7 @@ export const tenderColumns: ColumnDef<Tender<string, string, string>>[] = [
               </Link>
             </DropdownMenuItem>
 
-            <DropdownMenuSeparator />
+            {/* <DropdownMenuSeparator />
 
             <DropdownMenuItem>
               <Link
@@ -99,7 +98,7 @@ export const tenderColumns: ColumnDef<Tender<string, string, string>>[] = [
               >
                 View Details
               </Link>
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );

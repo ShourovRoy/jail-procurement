@@ -3,9 +3,11 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
+use uuid::Uuid;
 
 #[derive(Debug, Deserialize, Serialize, FromRow)]
-pub struct _Organization<T> {
+pub struct Organization<T> {
+    pub id: Uuid,
     pub name: String,
     pub proprietor_name: String,
     pub address: String,

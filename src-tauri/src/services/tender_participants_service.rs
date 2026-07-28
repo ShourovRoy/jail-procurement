@@ -27,6 +27,8 @@ pub async fn add_tender_participants(
             VALUES ($1, $2, $3, $4, $5, $6)
     ";
 
+    dbg!("tender bid payload: ", &payload);
+
     // veryfiy auth token and get claims
     let claims = retrive_verify_user_helper(auth_store, secret).await?;
 
@@ -41,7 +43,7 @@ pub async fn add_tender_participants(
         .execute(db_pool)
         .await
         .map_err(|tender_participant_err| {
-            dbg!(&tender_participant_err);
+            dbg!("tender bid creation db error: ", &tender_participant_err);
 
             // initialize default error_message and status_code
             let mut error_message: String = "Failed to add bid!".to_string();

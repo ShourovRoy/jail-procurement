@@ -13,4 +13,10 @@ pub struct CreateTenderParticipantInput {
     pub quoted_amount: Decimal,
     pub bid_submission_date: DateTime<Utc>,
     pub remarks: String,
+    pub issuer_bank_name: String,
+    pub issuer_bank_branch: String,
+    pub pay_order_number: String,
+    pub pay_order_expiry_date: DateTime<Utc>,
+    pub pay_order_issue_date: DateTime<Utc>,
+    pub pay_order_amount: Decimal,
 }
