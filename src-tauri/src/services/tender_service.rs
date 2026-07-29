@@ -43,8 +43,6 @@ pub async fn create_new_tender_service(
         .execute(db_pool)
         .await
         .map_err(|tender_err| {
-            dbg!(&tender_err);
-
             // initialize default error_message and status_code
             let mut error_message: String = "Failed to create new tender!".to_string();
             let mut status_code: i32 = 500;
@@ -107,12 +105,9 @@ pub async fn query_tender_list_service(
         sqlx::query_as::<_, Tender<String, Uuid, String>>(q)
             .fetch_all(db_pool)
             .await
-            .map_err(|err| {
-                dbg!(err);
-                ErrorModel {
-                    error_message: "Unable to get the tenders list".to_string(),
-                    status_code: 500,
-                }
+            .map_err(|_err| ErrorModel {
+                error_message: "Unable to get the tenders list".to_string(),
+                status_code: 500,
             })?;
 
     // return response

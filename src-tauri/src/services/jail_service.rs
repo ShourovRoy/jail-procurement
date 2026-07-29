@@ -88,13 +88,9 @@ pub async fn list_all_jail_service(
     let jail_list = sqlx::query_as::<_, Jail<String>>(q)
         .fetch_all(db_pool)
         .await
-        .map_err(|err| {
-            dbg!("jails fetch error {:?}", err);
-
-            ErrorModel {
-                error_message: "Unable to query the jails!".to_string(),
-                status_code: 500,
-            }
+        .map_err(|_err| ErrorModel {
+            error_message: "Unable to query the jails!".to_string(),
+            status_code: 500,
         })?;
 
     Ok(jail_list)

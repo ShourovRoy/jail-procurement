@@ -97,12 +97,9 @@ pub async fn query_organization_list_service(
     let res = sqlx::query_as::<_, Organization<Uuid>>(q)
         .fetch_all(db_pool)
         .await
-        .map_err(|org_query_err| {
-            dbg!(org_query_err);
-            ErrorModel {
-                status_code: 500,
-                error_message: "Unable to query organizations!".to_string(),
-            }
+        .map_err(|_org_query_err| ErrorModel {
+            status_code: 500,
+            error_message: "Unable to query organizations!".to_string(),
         })?;
 
     Ok(res)
