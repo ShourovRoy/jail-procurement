@@ -6,7 +6,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-// query jails
+// query tenders
 const tendersQuery = queryOptions({
   queryKey: ["tenders"],
   queryFn: () => queryTenderListCommand(),

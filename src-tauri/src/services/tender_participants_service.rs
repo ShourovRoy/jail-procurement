@@ -8,7 +8,11 @@ use uuid::Uuid;
 use crate::{
     domain::{
         inputs::tender_participant_inputs::CreateTenderParticipantInput,
-        models::global_model::ErrorModel,
+        models::{
+            global_model::ErrorModel, jail_model::JailV2, organization_model::Organization,
+            tender_model::Tender, tender_participant_model::TenderParticipant, user_model::User,
+        },
+        responses::tender_participant_responses::TenderParticipantDetailsRes,
     },
     helpers::token_helper::retrive_verify_user_helper,
 };
@@ -129,4 +133,124 @@ pub async fn add_tender_participants(
 
     // return success message
     Ok("Bid has been added successfully!".to_string())
+}
+
+// get tender participant details service
+pub async fn get_tender_participant_details(
+    db_pool: &PgPool,
+    auth_store: Arc<Store<Wry>>,
+    tender_participant_id: Uuid,
+    secret: &str,
+) -> Result<TenderParticipantDetailsRes, ErrorModel> {
+    // verify the auth token
+    retrive_verify_user_helper(auth_store, secret).await?;
+
+    // query to get tender participant details
+    let tender_particiant_details_q = "
+        SELECT 
+            *
+        FROM tender_participants AS tp
+        WHERE tp.id = $1    
+    ";
+
+    // tender details query
+    let tender_details_q = "
+        SELECT 
+            * 
+        FROM tenders WHERE id = $1
+    ";
+
+    // jails details query
+    let jail_details_q = "
+        SELECT 
+            * 
+        FROM jails 
+        WHERE id = $1
+    ";
+
+    // organization details query
+    let organization_details_q = "
+        SELECT 
+            * 
+        FROM organizations 
+        WHERE id = $1
+    ";
+
+    // creator details query
+    let creator_details_q = "
+            SELECT 
+                * 
+            FROM users 
+            WHERE id = $1
+        ";
+
+    // pay order details query
+    let pay_order_details_q = "
+        SELECT 
+            *
+        FROM pay_orders WHERE participant_id = $1
+    ";
+
+    // fetch tender participant details
+    let tender_participant = sqlx::query_as::<_, TenderParticipant>(tender_particiant_details_q)
+        .bind(tender_participant_id)
+        .fetch_one(db_pool)
+        .await
+        .map_err(|_err| ErrorModel {
+            error_message: "Failed to fetch tender participant details!".to_string(),
+            status_code: 500,
+        })?;
+
+    // fetch tender details
+    let tender_details = sqlx::query_as::<_, Tender>(tender_details_q)
+        .bind(&tender_participant.tender_id)
+        .fetch_one(db_pool)
+        .await
+        .map_err(|_err| ErrorModel {
+            error_message: "Failed to fetch tender details!".to_string(),
+            status_code: 500,
+        })?;
+
+    // fetch jail details
+    let jail_details = sqlx::query_as::<_, JailV2>(jail_details_q)
+        .bind(&tender_details.jail_id)
+        .fetch_one(db_pool)
+        .await
+        .map_err(|_err| ErrorModel {
+            error_message: "Failed to fetch jail details!".to_string(),
+            status_code: 500,
+        })?;
+
+    // fetch organization details
+    let organization_details = sqlx::query_as::<_, Organization>(organization_details_q)
+        .bind(&tender_participant.organization_id)
+        .fetch_one(db_pool)
+        .await
+        .map_err(|_err| ErrorModel {
+            error_message: "Failed to fetch organization details!".to_string(),
+            status_code: 500,
+        })?;
+
+    // fetch creator details
+    let creator_details = sqlx::query_as::<_, User>(creator_details_q)
+        .bind(&tender_participant.created_by)
+        .fetch_one(db_pool)
+        .await
+        .map_err(|_err| ErrorModel {
+            error_message: "Failed to fetch creator details!".to_string(),
+            status_code: 500,
+        })?;
+
+    let data = TenderParticipantDetailsRes {
+        tender_participant,
+        tender: tender_details,
+        jail: jail_details,
+        organization: organization_details,
+        creator: creator_details,
+        pay_order: None,
+    };
+
+    dbg!(&data);
+
+    Ok(data)
 }

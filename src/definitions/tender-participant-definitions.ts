@@ -18,4 +18,7 @@ export interface TenderParticipantWithCreatorOrgProprietor<C, O, P> {
   creator: C;
   organization: O;
   proprietor: P;
+  pay_order_id: string;
+  pay_order_number: string;
+  pay_order_is_released: boolean;
 }

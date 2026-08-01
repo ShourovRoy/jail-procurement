@@ -20,3 +20,9 @@ pub struct CreateTenderParticipantInput {
     pub pay_order_issue_date: DateTime<Utc>,
     pub pay_order_amount: Decimal,
 }
+
+// tender participant details input struct
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TenderParticipantDetailsInput {
+    pub tender_participant_id: Uuid,
+}

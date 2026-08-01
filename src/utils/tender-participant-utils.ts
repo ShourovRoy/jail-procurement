@@ -30,3 +30,18 @@ export const addTenderParticipant = async (
 
   return res;
 };
+
+// get tender participant details util
+export const getTenderParticipantDetails = async (
+  tender_participant_id: string,
+) => {
+  const res = await invoke("tender_participant_details_command", {
+    input: {
+      tender_participant_id,
+    },
+  }).catch((err) => {
+    return err;
+  });
+
+  console.log("tender participant details res: ", res);
+};

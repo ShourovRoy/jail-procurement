@@ -11,8 +11,7 @@ use crate::{
     domain::{
         inputs::tender_inputs::CreateTenderInputs,
         models::{
-            global_model::ErrorModel,
-            tender_model::{ TenderWithJailOrgWinnerCreator},
+            global_model::ErrorModel, tender_model::TenderWithJailOrgWinnerCreator,
             tender_participant_model::TenderParticipantWithOrgOwnerCreator,
         },
         responses::tender_responses::{TenderDetailsWithBidsListRes, TenderListRes},
@@ -156,11 +155,14 @@ pub async fn get_tender_details_with_bids_service(
             tp.remarks, tp.created_by, tp.created_at, tp.updated_at,
             o.name AS organization,
 			o.proprietor_name AS proprietor,
-            u.username AS creator
-			
+            u.username AS creator,
+			po.id AS pay_order_id,
+			po.pay_order_number AS pay_order_number,
+			po.is_released AS pay_order_is_released
         FROM tender_participants as tp
         LEFT JOIN organizations AS o ON tp.organization_id = o.id
         LEFT JOIN users AS u ON tp.created_by = u.id
+		LEFT JOIN pay_orders as po ON po.participant_id = tp.id
         WHERE tp.tender_id = $1
         ORDER BY tp.created_at DESC
     ";

@@ -26,4 +26,7 @@ pub struct TenderParticipantWithOrgOwnerCreator<O, P, U> {
     pub organization: O,
     pub proprietor: P,
     pub creator: U,
+    pub pay_order_id: Uuid,
+    pub pay_order_number: String,
+    pub pay_order_is_released: bool,
 }
