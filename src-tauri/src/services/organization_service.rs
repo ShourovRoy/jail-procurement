@@ -5,12 +5,11 @@ use std::sync::Arc;
 use sqlx::PgPool;
 use tauri::Wry;
 use tauri_plugin_store::Store;
-use uuid::Uuid;
 
 use crate::{
     domain::{
         inputs::organization_inputs::CreateOrganizationInput,
-        models::{global_model::ErrorModel, organization_model::Organization},
+        models::{global_model::ErrorModel, organization_model::OrganizationWithCreator},
     },
     helpers::token_helper::retrive_verify_user_helper,
 };
@@ -84,17 +83,23 @@ pub async fn query_organization_list_service(
     db_pool: &PgPool,
     auth_store: Arc<Store<Wry>>,
     secret: &str,
-) -> Result<Vec<Organization<Uuid>>, ErrorModel> {
+) -> Result<Vec<OrganizationWithCreator<String>>, ErrorModel> {
     // query to list organzations
     let q = "
-            SELECT * FROM organizations AS o ORDER BY o.created_at ASC
+            SELECT 
+                o.id, o.name, o.proprietor_name, o.address, o.district, o.phone_number, o.email, o.created_by, o.created_at,
+				o.updated_at, u.username AS creator
+            FROM 
+            organizations AS o 
+            LEFT JOIN users AS u ON o.created_by = u.id
+            ORDER BY o.created_at ASC;
         ";
 
     // veryfiy auth token and get claims
     retrive_verify_user_helper(auth_store, secret).await?;
 
     // execute the query
-    let res = sqlx::query_as::<_, Organization<Uuid>>(q)
+    let res = sqlx::query_as::<_, OrganizationWithCreator<String>>(q)
         .fetch_all(db_pool)
         .await
         .map_err(|_org_query_err| ErrorModel {

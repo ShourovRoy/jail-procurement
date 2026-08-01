@@ -9,12 +9,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Tender } from "@/definitions/tender-definitions";
+import { TenderWithJailWinnerOrgCreator } from "@/definitions/tender-definitions";
 import { Link } from "@tanstack/react-router";
 
-export const tenderColumns: ColumnDef<Tender<string, string, string>>[] = [
+export const tenderColumns: ColumnDef<
+  TenderWithJailWinnerOrgCreator<string, string, string>
+>[] = [
   {
-    accessorKey: "jail_id",
+    accessorKey: "jail",
     header: ({ column }) => (
       <Button
         variant="ghost"
@@ -26,19 +28,19 @@ export const tenderColumns: ColumnDef<Tender<string, string, string>>[] = [
     ),
   },
   {
-    accessorKey: "notice_number",
+    accessorKey: "tender.notice_number",
     header: "Notice Number",
   },
   {
-    accessorKey: "tender_number",
+    accessorKey: "tender.tender_number",
     header: "Tender Number",
   },
   {
-    accessorKey: "created_by",
+    accessorKey: "creator",
     header: "Created By",
   },
   {
-    accessorKey: "created_at",
+    accessorKey: "tender.created_at",
     header: ({ column }) => (
       <Button
         variant="ghost"
@@ -49,7 +51,7 @@ export const tenderColumns: ColumnDef<Tender<string, string, string>>[] = [
       </Button>
     ),
     cell: ({ row }) => {
-      const date = new Date(row.getValue("created_at"));
+      const date = new Date(row.getValue("tender_created_at"));
 
       return (
         <div>
@@ -57,12 +59,13 @@ export const tenderColumns: ColumnDef<Tender<string, string, string>>[] = [
         </div>
       );
     },
+    // header: "Created At",
   },
 
   {
     id: "actions",
     cell: ({ row }) => {
-      const tender = row.original;
+      const { tender } = row.original;
 
       return (
         <DropdownMenu>
@@ -83,11 +86,9 @@ export const tenderColumns: ColumnDef<Tender<string, string, string>>[] = [
                   id: tender.id,
                 }}
               >
-                Add Bidders / Participants
+                Add Participants
               </Link>
             </DropdownMenuItem>
-
-            {/* <DropdownMenuSeparator />
 
             <DropdownMenuItem>
               <Link
@@ -96,9 +97,9 @@ export const tenderColumns: ColumnDef<Tender<string, string, string>>[] = [
                   id: tender.id,
                 }}
               >
-                View Details
+                View Tender
               </Link>
-            </DropdownMenuItem> */}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

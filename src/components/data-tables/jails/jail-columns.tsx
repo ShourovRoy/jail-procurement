@@ -10,11 +10,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Jail } from "@/definitions/jail-definitions";
+import { JailWithCreator } from "@/definitions/jail-definitions";
 
-export const jailColumns: ColumnDef<Jail>[] = [
+export const jailColumns: ColumnDef<JailWithCreator<string>>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "jail.name",
     header: ({ column }) => (
       <Button
         variant="ghost"
@@ -26,22 +26,22 @@ export const jailColumns: ColumnDef<Jail>[] = [
     ),
   },
   {
-    accessorKey: "address",
+    accessorKey: "jail.address",
     header: "Address",
   },
   {
-    accessorKey: "phone_number",
+    accessorKey: "jail.phone_number",
     header: "Phone Number",
   },
   {
-    accessorKey: "created_by",
+    accessorKey: "creator",
     header: "Created By",
   },
   {
-    accessorKey: "created_at",
+    accessorKey: "jail.created_at",
     header: "Created At",
     cell: ({ row }) => {
-      const date = new Date(row.getValue("created_at"));
+      const date = new Date(row.getValue("jail_created_at"));
 
       return (
         <div>
@@ -69,7 +69,7 @@ export const jailColumns: ColumnDef<Jail>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(jail.id)}
+              onClick={() => navigator.clipboard.writeText(jail.jail.id)}
             >
               Copy Jail ID
             </DropdownMenuItem>

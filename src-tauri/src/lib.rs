@@ -27,16 +27,18 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             tauri::async_runtime::block_on(async {
-                let db = database::Database::new("postgresql://postgres@localhost:5432/messi")
-                    .await
-                    .expect("Unable to connect database!");
+                let db = database::Database::new(
+                    "postgresql://postgres@localhost:5432/jail-procurement-hello",
+                )
+                .await
+                .expect("Unable to connect database!");
 
                 let db_pool = Arc::new(Mutex::new(db.pool()));
 
                 let app_state = AppState {
                     db_pool,
                     env: EnvVars {
-                        token_secret: "hello".to_string(),
+                        token_secret: "S`HTEHA46U47IW57IK8O".to_string(),
                     },
                 };
 
@@ -62,6 +64,7 @@ pub fn run() {
             commands::organization_commands::filter_organization_list_command,
             commands::tender_commands::create_tender_comamnd,
             commands::tender_commands::tender_list_comamnd,
+            commands::tender_commands::tender_details_with_bids_command,
             commands::tender_participant_commands::add_participant_command,
         ])
         .run(tauri::generate_context!())

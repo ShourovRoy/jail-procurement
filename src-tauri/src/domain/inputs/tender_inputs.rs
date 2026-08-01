@@ -12,3 +12,9 @@ pub struct CreateTenderInputs {
     pub estimated_amount: Decimal,
     pub remarks: String,
 }
+
+// tender details query command input
+#[derive(Debug, Serialize, Deserialize)]
+pub struct QueryTednerDetailsAndBids {
+    pub tender_id: Uuid,
+}

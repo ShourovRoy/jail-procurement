@@ -3,6 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { invoke } from "@tauri-apps/api/core";
+import { ThemeProvider } from "@/components/theme-provider";
 // import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 interface RouterContext {
@@ -10,11 +11,13 @@ interface RouterContext {
 }
 
 const RootLayout = () => (
-  <TooltipProvider>
-    <Toaster />
-    <Outlet />
-    {/*<TanStackRouterDevtools  />*/}
-  </TooltipProvider>
+  <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <TooltipProvider>
+      <Toaster />
+      <Outlet />
+      {/*<TanStackRouterDevtools  />*/}
+    </TooltipProvider>
+  </ThemeProvider>
 );
 
 export const Route = createRootRouteWithContext<RouterContext>()({

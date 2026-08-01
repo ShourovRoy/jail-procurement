@@ -196,10 +196,10 @@ function RouteComponent() {
                           <SelectGroup>
                             {data?.success?.data?.jails.map((jail, index) => (
                               <SelectItem
-                                key={jail.id || index}
-                                value={jail.id}
+                                key={jail.jail.id || index}
+                                value={jail.jail.id}
                               >
-                                {jail.name}
+                                {jail.jail.name}
                               </SelectItem>
                             ))}
                           </SelectGroup>

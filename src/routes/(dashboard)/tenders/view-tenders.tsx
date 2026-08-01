@@ -24,6 +24,8 @@ function RouteComponent() {
   // getting tenders from cache
   const { data, error } = useSuspenseQuery(tendersQuery);
 
+  console.log(data.success?.data?.tenders);
+
   // track and show error message if available
   useEffect(() => {
     // checking if error

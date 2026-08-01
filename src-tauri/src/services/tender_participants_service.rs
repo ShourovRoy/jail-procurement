@@ -58,6 +58,8 @@ pub async fn add_tender_participants(
         .fetch_optional(&mut *tx)
         .await
         .map_err(|tender_participant_err| {
+            dbg!(&tender_participant_err);
+
             // initialize default error_message and status_code
             let mut error_message: String = "Failed to add bid!".to_string();
             let mut status_code: i32 = 500;

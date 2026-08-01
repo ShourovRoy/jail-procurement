@@ -70,6 +70,7 @@ function RouteComponent() {
     },
 
     onSubmit: async ({ value, formApi }) => {
+      console.log("bid value fn: ", value);
       // execute add tender participant util
       const res = await addTenderParticipant({
         tender_id: value.tender_id,
@@ -178,18 +179,19 @@ function RouteComponent() {
                               <ComboboxEmpty>No items found.</ComboboxEmpty>
                               <ComboboxList>
                                 {(item) => (
-                                  <div key={item.id}>
+                                  <div key={item.organization.name}>
                                     <ComboboxItem
                                       onClick={() => {
                                         tenderParticipantForm.setFieldValue(
                                           "organization_id",
-                                          item.id,
+                                          item.organization.id,
                                         );
                                       }}
-                                      key={item.id}
-                                      value={item.name}
+                                      key={item.organization.id}
+                                      value={item.organization.name}
                                     >
-                                      {item.name}
+                                      {item.organization.name}{" "}
+                                      {item.organization.id}
                                     </ComboboxItem>
                                   </div>
                                 )}

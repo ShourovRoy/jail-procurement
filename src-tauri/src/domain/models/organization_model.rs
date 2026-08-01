@@ -6,7 +6,7 @@ use sqlx::prelude::FromRow;
 use uuid::Uuid;
 
 #[derive(Debug, Deserialize, Serialize, FromRow)]
-pub struct Organization<T> {
+pub struct Organization {
     pub id: Uuid,
     pub name: String,
     pub proprietor_name: String,
@@ -14,7 +14,14 @@ pub struct Organization<T> {
     pub district: String,
     pub phone_number: String,
     pub email: String,
-    pub created_by: T,
+    pub created_by: Uuid,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Deserialize, Serialize, FromRow)]
+pub struct OrganizationWithCreator<T> {
+    #[sqlx(flatten)]
+    pub organization: Organization,
+    pub creator: T,
 }

@@ -29,11 +29,9 @@ export const createJailCommand = async (
 
 // get all jails utils
 export const getAllJailCommand = async (): Promise<
-  GlobalRes<JailsDataRes | null>
+  GlobalRes<JailsDataRes<string> | null>
 > => {
-  // artificial delay
-  await sleep(2000);
-  const res = await invoke<GlobalRes<JailsDataRes>>(
+  const res = await invoke<GlobalRes<JailsDataRes<string>>>(
     "view_all_lists_command",
   ).catch((err): GlobalRes<null> => {
     return err;

@@ -9,7 +9,7 @@ use tauri_plugin_store::Store;
 use crate::{
     domain::{
         inputs::jail_inputs::CreateJailInput,
-        models::{global_model::ErrorModel, jail_model::Jail},
+        models::{global_model::ErrorModel, jail_model::JailWithCreator},
     },
     helpers::token_helper::retrive_verify_user_helper,
 };
@@ -80,12 +80,16 @@ pub async fn list_all_jail_service(
     db_pool: &PgPool,
     _auth_store: Arc<Store<Wry>>,
     _secret: &str,
-) -> Result<Vec<Jail<String>>, ErrorModel> {
+) -> Result<Vec<JailWithCreator<String>>, ErrorModel> {
     let q = "
-        SELECT j.id, j.name, j.address, j.phone_number, u.username AS created_by, j.created_at, j.updated_at FROM jails AS j LEFT JOIN users AS u ON j.created_by=u.id  
+        SELECT 
+            j.id, j.name, j.address, j.phone_number, j.created_by, j.created_at, j.updated_at,
+            u.username AS creator
+        FROM jails AS j 
+        LEFT JOIN users AS u ON j.created_by=u.id 
     ";
 
-    let jail_list = sqlx::query_as::<_, Jail<String>>(q)
+    let jail_list = sqlx::query_as::<_, JailWithCreator<String>>(q)
         .fetch_all(db_pool)
         .await
         .map_err(|_err| ErrorModel {

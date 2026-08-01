@@ -2,11 +2,11 @@
 
 // Organization Definition
 
-export interface Organization<T> {
+export interface Organization {
   id: string;
   address: string;
   created_at: string; // ISO 8601 timestamp string
-  created_by: T;
+  created_by: string;
   district: string;
   email: string;
   name: string;
@@ -15,7 +15,12 @@ export interface Organization<T> {
   updated_at: string; // ISO 8601 timestamp string
 }
 
+export interface OrganizationWithCreator<T> {
+  organization: Organization;
+  creator: T;
+}
+
 // organiztion list query res
 export interface OrganizationListRes<T> {
-  organizations: Organization<T>[];
+  organizations: OrganizationWithCreator<T>[];
 }

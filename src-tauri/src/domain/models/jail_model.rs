@@ -6,12 +6,19 @@ use sqlx::prelude::FromRow;
 use uuid::Uuid;
 
 #[derive(Debug, FromRow, Serialize, Deserialize)]
-pub struct Jail<T> {
+pub struct JailV2 {
     pub id: Uuid,
     pub name: String,
     pub address: String,
     pub phone_number: String,
-    pub created_by: T,
+    pub created_by: Uuid,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
+}
+
+#[derive(Debug, FromRow, Serialize, Deserialize)]
+pub struct JailWithCreator<T> {
+    #[sqlx(flatten)]
+    pub jail: JailV2,
+    pub creator: T,
 }

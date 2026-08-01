@@ -2,7 +2,6 @@
 
 use tauri::{AppHandle, Manager};
 use tauri_plugin_store::StoreBuilder;
-use uuid::Uuid;
 
 use crate::{
     domain::{
@@ -60,7 +59,7 @@ pub async fn create_organization_command(
 #[tauri::command]
 pub async fn filter_organization_list_command(
     app: AppHandle,
-) -> Result<GlobalRes<OrganizationListRes<Uuid>, ()>, GlobalRes<(), ErrorModel>> {
+) -> Result<GlobalRes<OrganizationListRes<String>, ()>, GlobalRes<(), ErrorModel>> {
     // app state
     let state = app.state::<AppState>();
 

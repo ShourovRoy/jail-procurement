@@ -10,6 +10,11 @@ export interface Jail {
   updated_at: string;
 }
 
-export interface JailsDataRes {
-  jails: Jail[];
+export interface JailWithCreator<T> {
+  jail: Jail;
+  creator: T;
+}
+
+export interface JailsDataRes<T> {
+  jails: JailWithCreator<T>[];
 }
