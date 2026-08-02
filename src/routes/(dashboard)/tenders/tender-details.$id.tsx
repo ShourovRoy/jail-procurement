@@ -1,4 +1,4 @@
-import { TenderParticipantQuickActionDialog } from "@/components/dialogs/tender-details-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { queryTenderDetailsCommand } from "@/utils/tender-utils";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Badge } from "lucide-react";
 
 export const Route = createFileRoute("/(dashboard)/tenders/tender-details/$id")(
@@ -139,11 +139,21 @@ function RouteComponent() {
                     </div>
                   </CardContent>
 
-                  <CardFooter className="pt-2">
-                    <TenderParticipantQuickActionDialog
-                      btnText="Quick Action"
-                      tenderParticipantId={participant.tender_participant.id}
-                    />
+                  <CardFooter className="pt-2 flex justify-between items-center">
+                    <Link
+                      to="/tender-participant/participant/$id"
+                      params={{
+                        id: participant.tender_participant.id,
+                      }}
+                    >
+                      <Button variant="outline">View Participant</Button>
+                    </Link>
+                    {participant.tender_participant.organization_id !==
+                    success.data?.tender.tender.winner_participant_id ? (
+                      <Button>Declare Winner</Button>
+                    ) : (
+                      <Button disabled>Winner</Button>
+                    )}
                   </CardFooter>
                 </Card>
               ))}

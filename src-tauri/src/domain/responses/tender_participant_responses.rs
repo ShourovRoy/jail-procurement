@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
 
 use crate::domain::models::{
-    jail_model::JailV2, organization_model::Organization, tender_model::Tender,
-    tender_participant_model::TenderParticipant, user_model::User,
+    jail_model::JailV2, organization_model::Organization, pay_order_model::PayOrder,
+    tender_model::Tender, tender_participant_model::TenderParticipant, user_model::User,
 };
 
 // tender participant details response
@@ -16,5 +16,5 @@ pub struct TenderParticipantDetailsRes {
     pub jail: JailV2,
     pub organization: Organization,
     pub creator: User,
-    pub pay_order: Option<String>,
+    pub pay_order: PayOrder,
 }

@@ -34,6 +34,5 @@ export const queryOrgListCommand = async (): Promise<
   const res = await invoke<GlobalRes<OrganizationListRes<string>>>(
     "filter_organization_list_command",
   ).catch((err): GlobalRes<OrganizationListRes<string>> => err);
-  console.log("res", res);
   return res;
 };

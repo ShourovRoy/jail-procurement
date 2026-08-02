@@ -26,6 +26,7 @@ import { Route as dashboardOrganizationViewAllOrganizationsRouteImport } from '.
 import { Route as dashboardTendersIndexRouteImport } from './routes/(dashboard)/tenders/index'
 import { Route as dashboardTendersCreateNewTenderRouteImport } from './routes/(dashboard)/tenders/create-new-tender'
 import { Route as dashboardTendersViewTendersRouteImport } from './routes/(dashboard)/tenders/view-tenders'
+import { Route as dashboardTenderParticipantParticipantIdRouteImport } from './routes/(dashboard)/tender-participant/participant.$id'
 import { Route as dashboardTendersTenderDetailsIdRouteImport } from './routes/(dashboard)/tenders/tender-details.$id'
 import { Route as dashboardTendersTenderDetailsIdAddParticipantsRouteImport } from './routes/(dashboard)/tenders/tender-details_.$id.add-participants'
 
@@ -121,6 +122,12 @@ const dashboardTendersViewTendersRoute =
     path: '/view-tenders',
     getParentRoute: () => dashboardTendersRouteRoute,
   } as any)
+const dashboardTenderParticipantParticipantIdRoute =
+  dashboardTenderParticipantParticipantIdRouteImport.update({
+    id: '/tender-participant/participant/$id',
+    path: '/tender-participant/participant/$id',
+    getParentRoute: () => dashboardRouteRoute,
+  } as any)
 const dashboardTendersTenderDetailsIdRoute =
   dashboardTendersTenderDetailsIdRouteImport.update({
     id: '/tender-details/$id',
@@ -151,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/jail/': typeof dashboardJailIndexRoute
   '/organization/': typeof dashboardOrganizationIndexRoute
   '/tenders/': typeof dashboardTendersIndexRoute
+  '/tender-participant/participant/$id': typeof dashboardTenderParticipantParticipantIdRoute
   '/tenders/tender-details/$id': typeof dashboardTendersTenderDetailsIdRoute
   '/tenders/tender-details/$id/add-participants': typeof dashboardTendersTenderDetailsIdAddParticipantsRoute
 }
@@ -168,6 +176,7 @@ export interface FileRoutesByTo {
   '/jail': typeof dashboardJailIndexRoute
   '/organization': typeof dashboardOrganizationIndexRoute
   '/tenders': typeof dashboardTendersIndexRoute
+  '/tender-participant/participant/$id': typeof dashboardTenderParticipantParticipantIdRoute
   '/tenders/tender-details/$id': typeof dashboardTendersTenderDetailsIdRoute
   '/tenders/tender-details/$id/add-participants': typeof dashboardTendersTenderDetailsIdAddParticipantsRoute
 }
@@ -190,6 +199,7 @@ export interface FileRoutesById {
   '/(dashboard)/jail/': typeof dashboardJailIndexRoute
   '/(dashboard)/organization/': typeof dashboardOrganizationIndexRoute
   '/(dashboard)/tenders/': typeof dashboardTendersIndexRoute
+  '/(dashboard)/tender-participant/participant/$id': typeof dashboardTenderParticipantParticipantIdRoute
   '/(dashboard)/tenders/tender-details/$id': typeof dashboardTendersTenderDetailsIdRoute
   '/(dashboard)/tenders/tender-details_/$id/add-participants': typeof dashboardTendersTenderDetailsIdAddParticipantsRoute
 }
@@ -212,6 +222,7 @@ export interface FileRouteTypes {
     | '/jail/'
     | '/organization/'
     | '/tenders/'
+    | '/tender-participant/participant/$id'
     | '/tenders/tender-details/$id'
     | '/tenders/tender-details/$id/add-participants'
   fileRoutesByTo: FileRoutesByTo
@@ -229,6 +240,7 @@ export interface FileRouteTypes {
     | '/jail'
     | '/organization'
     | '/tenders'
+    | '/tender-participant/participant/$id'
     | '/tenders/tender-details/$id'
     | '/tenders/tender-details/$id/add-participants'
   id:
@@ -250,6 +262,7 @@ export interface FileRouteTypes {
     | '/(dashboard)/jail/'
     | '/(dashboard)/organization/'
     | '/(dashboard)/tenders/'
+    | '/(dashboard)/tender-participant/participant/$id'
     | '/(dashboard)/tenders/tender-details/$id'
     | '/(dashboard)/tenders/tender-details_/$id/add-participants'
   fileRoutesById: FileRoutesById
@@ -380,6 +393,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardTendersViewTendersRouteImport
       parentRoute: typeof dashboardTendersRouteRoute
     }
+    '/(dashboard)/tender-participant/participant/$id': {
+      id: '/(dashboard)/tender-participant/participant/$id'
+      path: '/tender-participant/participant/$id'
+      fullPath: '/tender-participant/participant/$id'
+      preLoaderRoute: typeof dashboardTenderParticipantParticipantIdRouteImport
+      parentRoute: typeof dashboardRouteRoute
+    }
     '/(dashboard)/tenders/tender-details/$id': {
       id: '/(dashboard)/tenders/tender-details/$id'
       path: '/tender-details/$id'
@@ -459,6 +479,7 @@ interface dashboardRouteRouteChildren {
   dashboardOrganizationRouteRoute: typeof dashboardOrganizationRouteRouteWithChildren
   dashboardTendersRouteRoute: typeof dashboardTendersRouteRouteWithChildren
   dashboardIndexRoute: typeof dashboardIndexRoute
+  dashboardTenderParticipantParticipantIdRoute: typeof dashboardTenderParticipantParticipantIdRoute
 }
 
 const dashboardRouteRouteChildren: dashboardRouteRouteChildren = {
@@ -466,6 +487,8 @@ const dashboardRouteRouteChildren: dashboardRouteRouteChildren = {
   dashboardOrganizationRouteRoute: dashboardOrganizationRouteRouteWithChildren,
   dashboardTendersRouteRoute: dashboardTendersRouteRouteWithChildren,
   dashboardIndexRoute: dashboardIndexRoute,
+  dashboardTenderParticipantParticipantIdRoute:
+    dashboardTenderParticipantParticipantIdRoute,
 }
 
 const dashboardRouteRouteWithChildren = dashboardRouteRoute._addFileChildren(

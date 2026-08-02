@@ -11,7 +11,6 @@ use crate::{
         models::global_model::{DataRes, ErrorModel, GlobalRes},
         responses::{
             tender_participant_responses::TenderParticipantDetailsRes,
-            tender_responses::TenderDetailsWithBidsListRes,
         },
     },
     services::tender_participants_service::{

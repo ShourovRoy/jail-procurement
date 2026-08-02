@@ -70,7 +70,6 @@ function RouteComponent() {
     },
 
     onSubmit: async ({ value, formApi }) => {
-      console.log("bid value fn: ", value);
       // execute add tender participant util
       const res = await addTenderParticipant({
         tender_id: value.tender_id,
@@ -166,10 +165,6 @@ function RouteComponent() {
                         <ComboboxInput
                           placeholder="Select an organization"
                           showClear
-
-                          onChange={(e) =>
-                            console.log("combobox: ", e.target.value)
-                          }
                         />
                         <ComboboxContent>
                           {isLoading ? (

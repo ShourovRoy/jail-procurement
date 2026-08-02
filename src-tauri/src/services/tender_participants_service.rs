@@ -10,7 +10,8 @@ use crate::{
         inputs::tender_participant_inputs::CreateTenderParticipantInput,
         models::{
             global_model::ErrorModel, jail_model::JailV2, organization_model::Organization,
-            tender_model::Tender, tender_participant_model::TenderParticipant, user_model::User,
+            pay_order_model::PayOrder, tender_model::Tender,
+            tender_participant_model::TenderParticipant, user_model::User,
         },
         responses::tender_participant_responses::TenderParticipantDetailsRes,
     },
@@ -241,13 +242,27 @@ pub async fn get_tender_participant_details(
             status_code: 500,
         })?;
 
+    // fetch pay order details
+    let pay_order_details = sqlx::query_as::<_, PayOrder>(pay_order_details_q)
+        .bind(&tender_participant_id)
+        .fetch_one(db_pool)
+        .await
+        .map_err(|err| {
+            dbg!("payorder error: ", &err);
+
+            ErrorModel {
+                error_message: "Failed to fetch pay order details!".to_string(),
+                status_code: 500,
+            }
+        })?;
+
     let data = TenderParticipantDetailsRes {
         tender_participant,
         tender: tender_details,
         jail: jail_details,
         organization: organization_details,
         creator: creator_details,
-        pay_order: None,
+        pay_order: pay_order_details,
     };
 
     dbg!(&data);

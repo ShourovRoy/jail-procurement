@@ -1,6 +1,7 @@
 // all tender participants related utils here (bid)
 
 import { GlobalRes } from "@/definitions/global-definition";
+import { TenderParticipantDetails } from "@/definitions/tender-participant-definitions";
 import { invoke } from "@tauri-apps/api/core";
 
 // new tender participant interface
@@ -34,14 +35,18 @@ export const addTenderParticipant = async (
 // get tender participant details util
 export const getTenderParticipantDetails = async (
   tender_participant_id: string,
-) => {
-  const res = await invoke("tender_participant_details_command", {
-    input: {
-      tender_participant_id,
+): Promise<GlobalRes<TenderParticipantDetails>> => {
+  
+  const res = await invoke<GlobalRes<TenderParticipantDetails>>(
+    "tender_participant_details_command",
+    {
+      input: {
+        tender_participant_id,
+      },
     },
-  }).catch((err) => {
+  ).catch((err): GlobalRes<TenderParticipantDetails> => {
     return err;
   });
 
-  console.log("tender participant details res: ", res);
+  return res;
 };

@@ -24,7 +24,6 @@ function RouteComponent() {
       password: "",
     },
     onSubmit: async ({ value, formApi }) => {
-      console.log(value)
       const payload: SignupInput = {
         email: value.email,
         username: value.username,
