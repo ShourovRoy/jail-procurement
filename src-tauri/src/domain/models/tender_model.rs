@@ -56,8 +56,8 @@ pub struct Tender {
 #[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct TenderWithJailOrgWinnerCreator<J, O, C> {
     #[sqlx(flatten)]
-    tender: Tender,
-    jail: J,
-    winner_organization: Option<O>,
-    creator: C,
+    pub tender: Tender,
+    pub jail: J,
+    pub winner_organization: Option<O>,
+    pub creator: C,
 }

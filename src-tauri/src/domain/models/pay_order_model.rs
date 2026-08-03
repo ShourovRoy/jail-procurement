@@ -27,7 +27,7 @@ pub struct PayOrder {
 
 // pay order with tender participant, released by
 #[derive(Debug, Serialize, Deserialize, FromRow)]
-pub struct PayOrderWithParticipantReleasedByDetails<TP, RB> {
+pub struct _PayOrderWithParticipantReleasedByDetails<TP, RB> {
     #[sqlx(flatten)]
     pub pay_order: PayOrder,
     pub tender_participant: TP,

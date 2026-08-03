@@ -1,6 +1,10 @@
+import { ReleasePayorderSheet } from "@/components/sheets/release-pay-order-sheet";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTenderParticipantDetails } from "@/utils/tender-participant-utils";
+import {
+  assignTenderParticipantWinner,
+  getTenderParticipantDetails,
+} from "@/utils/tender-participant-utils";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Badge } from "lucide-react";
@@ -32,6 +36,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { id: tenderParticipantId } = Route.useParams();
+  const { queryClient } = Route.useRouteContext();
 
   const {
     data: { success, error: participantError },
@@ -42,6 +47,38 @@ function RouteComponent() {
   const isWinner =
     success?.data?.tender_participant.id ===
     success?.data?.tender.winner_participant_id;
+
+  // assign tender participant function
+  const assignTenderParticipantWinnerHandler = async (
+    tenderId: string,
+    tenderParticipantId: string,
+  ) => {
+    const res = await assignTenderParticipantWinner(
+      tenderId,
+      tenderParticipantId,
+    );
+
+    // handle error
+    if (res?.error) {
+      toast.error(res.error.error_message);
+    }
+
+    // handle success message
+    if (res.success?.message) {
+      // show message
+      toast.success(res.success.message);
+
+      // invalidate tender participant query cache and refetch
+      Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["tender-participant", tenderParticipantId],
+        }),
+        queryClient.refetchQueries({
+          queryKey: ["tender-participant", tenderParticipantId],
+        }),
+      ]);
+    }
+  };
 
   // track the error
   useEffect(() => {
@@ -64,16 +101,46 @@ function RouteComponent() {
 
       {success?.data && (
         <div className="space-y-6">
-          {/* PRIMARY FOCUS: Participant Card */}
+          {/* Participant Card */}
           <Card className="border-2">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pb-4">
               <div className="flex items-center gap-2">
                 <CardTitle className="text-xl">Participant Details</CardTitle>
                 {isWinner && <Badge>Winner</Badge>}
               </div>
-              <Button variant={isWinner ? "outline" : "default"}>
-                {isWinner ? "Discard Winner" : "Assign Winner"}
-              </Button>
+
+              {/* Responsive Button Group */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+                <Button
+                  onClick={async () => {
+                    if (!isWinner) {
+                      await assignTenderParticipantWinnerHandler(
+                        success.data?.tender.id!,
+                        success.data?.tender_participant.id!,
+                      );
+                    }
+                    // TODO: handle for discarding winner
+                  }}
+                  variant={isWinner ? "destructive" : "default"}
+                  className="w-full sm:w-auto"
+                >
+                  {isWinner ? "Discard Winner" : "Assign Winner"}
+                </Button>
+
+                {/* release pay order */}
+                {!success.data.pay_order.is_released && (
+                  <ReleasePayorderSheet
+                    pay_order_id={success.data.pay_order.id}
+                    tender_participant_id={success.data.tender_participant.id}
+                  />
+                )}
+
+                {isWinner && (
+                  <Button variant="outline" className="w-full sm:w-auto">
+                    Attach Performance Security
+                  </Button>
+                )}
+              </div>
             </CardHeader>
 
             <CardContent className="space-y-4">

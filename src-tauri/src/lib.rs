@@ -41,7 +41,6 @@ pub fn run() {
                         token_secret: "S`HTEHA46U47IW57IK8O".to_string(),
                     },
                 };
-
                 app.manage(app_state)
             });
 
@@ -66,7 +65,9 @@ pub fn run() {
             commands::tender_commands::tender_list_comamnd,
             commands::tender_commands::tender_details_with_bids_command,
             commands::tender_participant_commands::add_participant_command,
+            commands::tender_participant_commands::assign_tender_participant_winner,
             commands::tender_participant_commands::tender_participant_details_command,
+            commands::pay_order_commands::release_pay_order_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

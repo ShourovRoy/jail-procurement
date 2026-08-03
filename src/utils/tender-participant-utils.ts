@@ -36,7 +36,6 @@ export const addTenderParticipant = async (
 export const getTenderParticipantDetails = async (
   tender_participant_id: string,
 ): Promise<GlobalRes<TenderParticipantDetails>> => {
-  
   const res = await invoke<GlobalRes<TenderParticipantDetails>>(
     "tender_participant_details_command",
     {
@@ -45,6 +44,26 @@ export const getTenderParticipantDetails = async (
       },
     },
   ).catch((err): GlobalRes<TenderParticipantDetails> => {
+    return err;
+  });
+
+  return res;
+};
+
+// assign the tender participant winner
+export const assignTenderParticipantWinner = async (
+  tenderId: string,
+  tenderParticipantId: string,
+): Promise<GlobalRes<null>> => {
+  const res = await invoke<GlobalRes<null>>(
+    "assign_tender_participant_winner",
+    {
+      input: {
+        tender_id: tenderId,
+        tender_participant_id: tenderParticipantId,
+      },
+    },
+  ).catch((err): GlobalRes<null> => {
     return err;
   });
 

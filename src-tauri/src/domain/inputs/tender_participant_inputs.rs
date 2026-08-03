@@ -26,3 +26,10 @@ pub struct CreateTenderParticipantInput {
 pub struct TenderParticipantDetailsInput {
     pub tender_participant_id: Uuid,
 }
+
+// tender participant winner inpute
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TenderParticipantWinnerInput {
+    pub tender_participant_id: Uuid,
+    pub tender_id: Uuid,
+}

@@ -10,7 +10,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { queryTenderDetailsCommand } from "@/utils/tender-utils";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Badge } from "lucide-react";
 
 export const Route = createFileRoute("/(dashboard)/tenders/tender-details/$id")(
   {
@@ -78,6 +77,28 @@ function RouteComponent() {
                     {success.data?.tender.tender.estimated_amount} TK
                   </p>
                 </div>
+
+                {/* Winner Participant - Fixed Layout & Overflow */}
+                {success.data?.tender.winner_organization && (
+                  <div className="space-y-1 min-w-0">
+                    <span className="text-sm text-muted-foreground block">
+                      Winner Participant
+                    </span>
+                    <Link
+                      to="/tender-participant/participant/$id"
+                      params={{
+                        id:
+                          success.data?.tender.tender.winner_participant_id ??
+                          "",
+                      }}
+                      title={success.data?.tender.winner_organization}
+                      className="font-medium text-primary hover:underline block truncate"
+                    >
+                      {success.data?.tender.winner_organization}
+                    </Link>
+                  </div>
+                )}
+
                 <div className="space-y-1">
                   <span className="text-sm text-muted-foreground">
                     Total Bids
@@ -131,11 +152,12 @@ function RouteComponent() {
 
                     <div className="flex justify-between items-center">
                       <span className="text-muted-foreground">Status</span>
-                      <Badge>
-                        {participant.pay_order_is_released
-                          ? "Released"
+                      <p>
+                        {participant.tender_participant.id ===
+                        success.data?.tender.tender.winner_participant_id
+                          ? "Winner"
                           : "Pending"}
-                      </Badge>
+                      </p>
                     </div>
                   </CardContent>
 
@@ -148,12 +170,6 @@ function RouteComponent() {
                     >
                       <Button variant="outline">View Participant</Button>
                     </Link>
-                    {participant.tender_participant.organization_id !==
-                    success.data?.tender.tender.winner_participant_id ? (
-                      <Button>Declare Winner</Button>
-                    ) : (
-                      <Button disabled>Winner</Button>
-                    )}
                   </CardFooter>
                 </Card>
               ))}

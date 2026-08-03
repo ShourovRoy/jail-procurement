@@ -265,7 +265,49 @@ pub async fn get_tender_participant_details(
         pay_order: pay_order_details,
     };
 
-    dbg!(&data);
-
     Ok(data)
+}
+
+// assign tender participant winner service
+pub async fn assign_tender_participant_winner_service(
+    db_pool: &PgPool,
+    auth_store: Arc<Store<Wry>>,
+    tender_participant_id: Uuid,
+    tender_id: Uuid,
+    secret: &str,
+) -> Result<String, ErrorModel> {
+    // verify the auth token
+    retrive_verify_user_helper(auth_store, secret).await?;
+
+    // query statement to select and update winner details
+    let q = "
+        UPDATE tenders
+        SET winner_participant_id = tp.id,
+            winner_bid_amount = tp.quoted_amount
+        FROM tender_participants AS tp
+        WHERE tenders.id = $1 AND tenders.winner_participant_id IS NULL AND tp.id = $2
+    ";
+
+    let res = sqlx::query(q)
+        .bind(tender_id)
+        .bind(tender_participant_id)
+        .execute(db_pool)
+        .await
+        .map_err(|err| {
+            dbg!(err);
+            ErrorModel {
+                error_message: "Unable to process the winner command!".to_string(),
+                status_code: 500,
+            }
+        })?;
+
+    // handle if no updateds are done
+    if res.rows_affected() == 0 {
+        return Err(ErrorModel {
+            error_message: "The tender may found its winner earlier!".to_string(),
+            status_code: 500,
+        });
+    }
+
+    Ok("Winner has been assigned".to_string())
 }
