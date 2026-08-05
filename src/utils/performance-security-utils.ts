@@ -32,3 +32,28 @@ export const addPerformanceSecurityUtilCommand = async (
 
   return res;
 };
+
+// release performance security inputs
+export interface ReleasePerformanceSecurityInputs {
+  performance_security_id: string;
+  participant_id: string;
+  released_date: string;
+}
+
+// release performance security
+export const releasePerformanceSecurityUtilCommand = async (
+  payload: ReleasePerformanceSecurityInputs,
+): Promise<GlobalRes<null>> => {
+  const res = await invoke<GlobalRes<null>>(
+    "release_performance_security_command",
+    {
+      input: {
+        ...payload,
+      },
+    },
+  ).catch((err): GlobalRes<null> => {
+    return err;
+  });
+
+  return res;
+};

@@ -1,5 +1,6 @@
 import { AddPerformanceSecurityDialog } from "@/components/dialogs/add-performance-security-dialog";
 import { ReleasePayorderSheet } from "@/components/sheets/release-pay-order-sheet";
+import { ReleasePerformanceSecuritySheet } from "@/components/sheets/release-performance-security-sheet";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -138,12 +139,33 @@ function RouteComponent() {
                 )}
 
                 {isWinner && (
-                  <AddPerformanceSecurityDialog
-                    organization_id={success.data.organization.id}
-                    participant_id={success.data.tender_participant.id}
-                    tender_id={success.data.tender.id}
-                    queryClient={queryClient}
-                  />
+                  <>
+                    {success.data?.performance_security?.id ? (
+                      <>
+                        {!success.data?.performance_security?.is_released && (
+                          <>
+                            <ReleasePerformanceSecuritySheet
+                              tender_participant_id={
+                                success.data.tender_participant.id!
+                              }
+                              performance_security_id={
+                                success.data.performance_security.id
+                              }
+                              queryClient={queryClient}
+                            />
+                          </>
+                        )}
+                        <Button>Complete Contract</Button>
+                      </>
+                    ) : (
+                      <AddPerformanceSecurityDialog
+                        organization_id={success.data.organization.id}
+                        participant_id={success.data.tender_participant.id}
+                        tender_id={success.data.tender.id}
+                        queryClient={queryClient}
+                      />
+                    )}
+                  </>
                 )}
               </div>
             </CardHeader>

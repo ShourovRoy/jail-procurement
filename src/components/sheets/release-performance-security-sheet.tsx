@@ -1,3 +1,4 @@
+// release performance security sheet
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,32 +13,32 @@ import {
 import { useForm } from "@tanstack/react-form";
 import { DatePickerField } from "../dates/date-input-field";
 import { Spinner } from "../ui/spinner";
-import { releasePayorderUtilCommand } from "@/utils/pay-order-utils";
 import { toast } from "sonner";
 import { QueryClient } from "@tanstack/react-query";
+import { releasePerformanceSecurityUtilCommand } from "@/utils/performance-security-utils";
 import { useState } from "react";
 
-export function ReleasePayorderSheet({
+export function ReleasePerformanceSecuritySheet({
   tender_participant_id,
-  pay_order_id,
+  performance_security_id,
   queryClient,
 }: {
   tender_participant_id: string | null | undefined;
-  pay_order_id: string | null | undefined;
+  performance_security_id: string | null | undefined;
   queryClient: QueryClient;
 }) {
   const [open, setOpen] = useState<boolean>(false);
 
-  const releasePaymentForm = useForm({
+  const releasePerformanceSecurityForm = useForm({
     defaultValues: {
       tender_participant_id: tender_participant_id ?? "",
-      pay_order_id: pay_order_id ?? "",
+      performance_security_id: performance_security_id ?? "",
       released_date: "",
     },
     onSubmit: async ({ value }) => {
-      const res = await releasePayorderUtilCommand({
+      const res = await releasePerformanceSecurityUtilCommand({
         participant_id: value.tender_participant_id,
-        pay_order_id: value.pay_order_id,
+        performance_security_id: value.performance_security_id,
         released_date: value.released_date,
       });
 
@@ -61,7 +62,7 @@ export function ReleasePayorderSheet({
           }),
         ]);
 
-        // close sheet
+        // close the sheet
         setOpen(false);
       }
     },
@@ -72,7 +73,7 @@ export function ReleasePayorderSheet({
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button variant="outline" className="w-full sm:w-auto">
-            Release Payorder
+            Release Performance Security
           </Button>
         </SheetTrigger>
         <SheetContent
@@ -84,18 +85,18 @@ export function ReleasePayorderSheet({
               e.stopPropagation();
               e.preventDefault();
 
-              await releasePaymentForm.handleSubmit();
+              await releasePerformanceSecurityForm.handleSubmit();
             }}
           >
             <SheetHeader>
-              <SheetTitle>Pay Order Release Confirmation</SheetTitle>
+              <SheetTitle>Performance Security Release Confirmation</SheetTitle>
               <SheetDescription>
                 Selecting the date will help to keep the track of release.
               </SheetDescription>
             </SheetHeader>
             <div className="no-scrollbar overflow-y-auto px-4">
               <div className="py-3">
-                <releasePaymentForm.Field
+                <releasePerformanceSecurityForm.Field
                   name="released_date"
                   validators={{
                     onChange: ({ value }) =>
@@ -104,14 +105,14 @@ export function ReleasePayorderSheet({
                   children={(field) => (
                     <DatePickerField
                       field={field}
-                      label="Pay-Order Issue Date"
+                      label="Performance Security Issue Date"
                     />
                   )}
                 />
               </div>
             </div>
             <SheetFooter>
-              <releasePaymentForm.Subscribe
+              <releasePerformanceSecurityForm.Subscribe
                 selector={(state) => [state.canSubmit, state.isSubmitting]}
                 children={([canSubmit, isSubmitting]) => (
                   <Button

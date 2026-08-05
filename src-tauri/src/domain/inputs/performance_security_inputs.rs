@@ -18,3 +18,11 @@ pub struct AddPerformanceSecurityInput {
     pub expiry_date: DateTime<Utc>,
     pub remarks: String,
 }
+
+// release performance security inputs
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ReleasePerformanceSecurityInput {
+    pub participant_id: Uuid,
+    pub performance_security_id: Uuid,
+    pub released_date: DateTime<Utc>,
+}

@@ -8,7 +8,9 @@ use tauri_plugin_store::Store;
 
 use crate::{
     domain::{
-        inputs::performance_security_inputs::AddPerformanceSecurityInput,
+        inputs::performance_security_inputs::{
+            AddPerformanceSecurityInput, ReleasePerformanceSecurityInput,
+        },
         models::{global_model::ErrorModel, pay_order_model::PayOrder},
     },
     helpers::token_helper::retrive_verify_user_helper,
@@ -101,4 +103,51 @@ pub async fn add_performance_security_service(
     }
 
     Ok("Performance security has been added".to_string())
+}
+
+// release performance security
+pub async fn release_performance_security_service(
+    db_pool: &PgPool,
+    auth_store: Arc<Store<Wry>>,
+    payload: ReleasePerformanceSecurityInput,
+    secret: &str,
+) -> Result<String, ErrorModel> {
+    // query statement to release performance security
+    let q = "
+
+        UPDATE performance_security
+            SET is_released = $1, released_date = $2, released_by = $3
+        WHERE id = $4 AND participant_id = $5 AND is_released = FALSE
+    
+    ";
+
+    // veryfiy auth token and get claims
+    let claims = retrive_verify_user_helper(auth_store, secret).await?;
+
+    // release the performance security query
+    let res = sqlx::query(q)
+        .bind(true)
+        .bind(payload.released_date)
+        .bind(claims.user_id)
+        .bind(payload.performance_security_id)
+        .bind(payload.participant_id)
+        .execute(db_pool)
+        .await
+        .map_err(|release_ps_db_err| {
+            dbg!(release_ps_db_err);
+            ErrorModel {
+                error_message: "Failed to release the performance security!".to_string(),
+                status_code: 500,
+            }
+        })?;
+
+    // check if update not successful
+    if res.rows_affected() == 0 {
+        return Err(ErrorModel {
+            status_code: 404,
+            error_message: "Performance security already released or not exist!".to_string(),
+        });
+    }
+
+    Ok("Performance security has been released.".to_string())
 }

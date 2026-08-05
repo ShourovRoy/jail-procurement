@@ -70,6 +70,7 @@ pub fn run() {
             commands::tender_participant_commands::tender_participant_details_command,
             commands::pay_order_commands::release_pay_order_command,
             commands::performance_security_commands::add_performance_security_command,
+            commands::performance_security_commands::release_performance_security_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

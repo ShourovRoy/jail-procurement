@@ -5,10 +5,15 @@ use tauri_plugin_store::StoreBuilder;
 
 use crate::{
     domain::{
-        inputs::performance_security_inputs::AddPerformanceSecurityInput,
+        inputs::performance_security_inputs::{
+            AddPerformanceSecurityInput, ReleasePerformanceSecurityInput,
+        },
         models::global_model::{DataRes, ErrorModel, GlobalRes},
     },
-    services::performance_security_service::add_performance_security_service,
+    helpers::command_initializers::apphandler_auth_store_init,
+    services::performance_security_service::{
+        add_performance_security_service, release_performance_security_service,
+    },
     states::app_state::AppState,
 };
 
@@ -44,11 +49,36 @@ pub async fn add_performance_security_command(
             error: Some(err),
         })?;
 
-        
     Ok(GlobalRes {
         success: Some(DataRes {
             data: None,
             message: res,
+        }),
+        error: None,
+    })
+}
+
+// release performance security command
+#[tauri::command]
+pub async fn release_performance_security_command(
+    app: AppHandle,
+    input: ReleasePerformanceSecurityInput,
+) -> Result<GlobalRes<(), ()>, GlobalRes<(), ErrorModel>> {
+    // initialize state, db and authstore
+    let (state, db_pool, auth_store) = apphandler_auth_store_init(&app).await?;
+
+    let res =
+        release_performance_security_service(&db_pool, auth_store, input, &state.env.token_secret)
+            .await
+            .map_err(|err| GlobalRes {
+                success: None,
+                error: Some(err),
+            })?;
+
+    Ok(GlobalRes {
+        success: Some(DataRes {
+            message: res,
+            data: None,
         }),
         error: None,
     })
