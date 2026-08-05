@@ -187,7 +187,7 @@ function RouteComponent() {
                 <div>
                   <p className="text-sm text-muted-foreground">Submitted By</p>
                   <p className="text-sm">
-                    {success.data.tender_participant.created_by}
+                    {success.data.creator.full_name}
                   </p>
                 </div>
                 <div>
