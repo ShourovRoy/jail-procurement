@@ -14,17 +14,17 @@ import { DatePickerField } from "../dates/date-input-field";
 import { Spinner } from "../ui/spinner";
 import { releasePayorderUtilCommand } from "@/utils/pay-order-utils";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 
 export function ReleasePayorderSheet({
   tender_participant_id,
   pay_order_id,
+  queryClient,
 }: {
   tender_participant_id: string | null | undefined;
   pay_order_id: string | null | undefined;
+  queryClient: QueryClient;
 }) {
-  const queryClient = useQueryClient();
-
   const releasePaymentForm = useForm({
     defaultValues: {
       tender_participant_id: tender_participant_id ?? "",

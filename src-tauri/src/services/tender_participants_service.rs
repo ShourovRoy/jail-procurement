@@ -10,8 +10,8 @@ use crate::{
         inputs::tender_participant_inputs::CreateTenderParticipantInput,
         models::{
             global_model::ErrorModel, jail_model::JailV2, organization_model::Organization,
-            pay_order_model::PayOrder, tender_model::Tender,
-            tender_participant_model::TenderParticipant, user_model::User,
+            pay_order_model::PayOrder, performance_security_model::PerformanceSecurity,
+            tender_model::Tender, tender_participant_model::TenderParticipant, user_model::User,
         },
         responses::tender_participant_responses::TenderParticipantDetailsRes,
     },
@@ -34,6 +34,14 @@ pub async fn add_tender_participants(
             status_code: 500,
         })?;
 
+    // check if tender already had an winner or not
+    let tender_winner_check_q = "
+        
+        SELECT winner_participant_id FROM tenders
+        WHERE id = $1 AND winner_participant_id IS NOT NULL;
+    
+    ";
+
     // query to insert participant tender bid
     let tender_participant_q = "
         INSERT INTO tender_participants (tender_id, organization_id, quoted_amount, bid_submission_date, remarks, created_by)
@@ -50,6 +58,27 @@ pub async fn add_tender_participants(
 
     // veryfiy auth token and get claims
     let claims = retrive_verify_user_helper(auth_store, secret).await?;
+
+    // check if winner already there
+    let is_winner_exist = sqlx::query(tender_winner_check_q)
+        .bind(payload.tender_id)
+        .fetch_optional(db_pool)
+        .await
+        .map_err(|check_winner_tender_check_err| {
+            dbg!(check_winner_tender_check_err);
+            ErrorModel {
+                error_message: "Something went wrong! Please try again.".to_string(),
+                status_code: 500,
+            }
+        })?;
+
+    // check if winner already exist then forbid new participants
+    if let Some(_is_exist) = is_winner_exist {
+        return Err(ErrorModel {
+            error_message: "Winner selected can't add more bids or participants!".to_string(),
+            status_code: 400,
+        });
+    };
 
     // database transaction phase starts here
     // exec the sql query
@@ -192,6 +221,12 @@ pub async fn get_tender_participant_details(
         FROM pay_orders WHERE participant_id = $1
     ";
 
+    // performance security query
+    let performance_security_q = "
+        SELECT * FROM performance_security
+        WHERE participant_id = $1
+    ";
+
     // fetch tender participant details
     let tender_participant = sqlx::query_as::<_, TenderParticipant>(tender_particiant_details_q)
         .bind(tender_participant_id)
@@ -256,6 +291,24 @@ pub async fn get_tender_participant_details(
             }
         })?;
 
+    let mut performance_security: Option<PerformanceSecurity> = None;
+
+    // fetch performance security details only if winner declared
+    if tender_details.winner_participant_id.is_none() == false {
+        performance_security = sqlx::query_as::<_, PerformanceSecurity>(performance_security_q)
+            .bind(tender_details.winner_participant_id)
+            .fetch_optional(db_pool)
+            .await
+            .map_err(|performance_sec_fetch_err| {
+                dbg!("po error: ", &performance_sec_fetch_err);
+
+                ErrorModel {
+                    error_message: "Failed to fetch pay order details!".to_string(),
+                    status_code: 500,
+                }
+            })?;
+    }
+
     let data = TenderParticipantDetailsRes {
         tender_participant,
         tender: tender_details,
@@ -263,6 +316,7 @@ pub async fn get_tender_participant_details(
         organization: organization_details,
         creator: creator_details,
         pay_order: pay_order_details,
+        performance_security: performance_security,
     };
 
     Ok(data)

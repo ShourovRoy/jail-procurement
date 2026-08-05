@@ -28,7 +28,7 @@ pub fn run() {
         .setup(|app| {
             tauri::async_runtime::block_on(async {
                 let db = database::Database::new(
-                    "postgresql://postgres@localhost:5432/jail-procurement-hello",
+                    "postgresql://postgres@localhost:5432/jail-procurement-new",
                 )
                 .await
                 .expect("Unable to connect database!");
@@ -38,9 +38,10 @@ pub fn run() {
                 let app_state = AppState {
                     db_pool,
                     env: EnvVars {
-                        token_secret: "S`HTEHA46U47IW57IK8O".to_string(),
+                        token_secret: "fvsrgethhjryjdnjyjryjtujdththryj57".to_string(),
                     },
                 };
+
                 app.manage(app_state)
             });
 
@@ -68,6 +69,7 @@ pub fn run() {
             commands::tender_participant_commands::assign_tender_participant_winner,
             commands::tender_participant_commands::tender_participant_details_command,
             commands::pay_order_commands::release_pay_order_command,
+            commands::performance_security_commands::add_performance_security_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,3 +1,4 @@
+import { AddPerformanceSecurityDialog } from "@/components/dialogs/add-performance-security-dialog";
 import { ReleasePayorderSheet } from "@/components/sheets/release-pay-order-sheet";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -132,13 +133,17 @@ function RouteComponent() {
                   <ReleasePayorderSheet
                     pay_order_id={success.data.pay_order.id}
                     tender_participant_id={success.data.tender_participant.id}
+                    queryClient={queryClient}
                   />
                 )}
 
                 {isWinner && (
-                  <Button variant="outline" className="w-full sm:w-auto">
-                    Attach Performance Security
-                  </Button>
+                  <AddPerformanceSecurityDialog
+                    organization_id={success.data.organization.id}
+                    participant_id={success.data.tender_participant.id}
+                    tender_id={success.data.tender.id}
+                    queryClient={queryClient}
+                  />
                 )}
               </div>
             </CardHeader>
@@ -265,6 +270,81 @@ function RouteComponent() {
                 </p>
               </CardContent>
             </Card>
+
+            {/* pay order */}
+            {success.data.pay_order && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-semibold">
+                    Pay Order
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm space-y-1">
+                  <p className="font-medium">
+                    {success.data.pay_order.issuer_bank_name}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">
+                      Pay-order number:
+                    </span>{" "}
+                    {success.data.pay_order.pay_order_number}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">Issue date:</span>{" "}
+                    {success.data.pay_order.issue_date.toString()}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">Expire date:</span>{" "}
+                    {success.data?.pay_order?.expiry_date.toString()}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">Status:</span>{" "}
+                    {success.data?.pay_order?.is_released
+                      ? "Released"
+                      : "Not Released"}
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* performance security  */}
+            {success.data?.performance_security && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-semibold">
+                    Performance Security
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm space-y-1">
+                  <p className="font-medium">
+                    {success.data.performance_security.issuer_bank_name}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">
+                      Performance Security number:
+                    </span>{" "}
+                    {
+                      success.data.performance_security
+                        .performance_security_number
+                    }
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">Issue date:</span>{" "}
+                    {success.data.performance_security.issue_date.toString()}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">Expire date:</span>{" "}
+                    {success.data?.performance_security?.expiry_date.toString()}
+                  </p>
+                  <p>
+                    <span className="text-muted-foreground">Status:</span>{" "}
+                    {success.data?.performance_security?.is_released
+                      ? "Released"
+                      : "Not Released"}
+                  </p>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       )}

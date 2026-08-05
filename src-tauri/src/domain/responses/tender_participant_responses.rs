@@ -5,7 +5,8 @@ use sqlx::prelude::FromRow;
 
 use crate::domain::models::{
     jail_model::JailV2, organization_model::Organization, pay_order_model::PayOrder,
-    tender_model::Tender, tender_participant_model::TenderParticipant, user_model::User,
+    performance_security_model::PerformanceSecurity, tender_model::Tender,
+    tender_participant_model::TenderParticipant, user_model::User,
 };
 
 // tender participant details response
@@ -17,4 +18,5 @@ pub struct TenderParticipantDetailsRes {
     pub organization: Organization,
     pub creator: User,
     pub pay_order: PayOrder,
+    pub performance_security: Option<PerformanceSecurity>,
 }

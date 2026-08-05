@@ -4,6 +4,7 @@ import { User } from "./auth-definitions";
 import { Jail } from "./jail-definitions";
 import { Organization } from "./org-definitions";
 import { PayOrder } from "./pay-order-definitions";
+import { PerformanceSecurity } from "./performance-security-definition";
 import { Tender } from "./tender-definitions";
 
 // tender participant
@@ -37,4 +38,5 @@ export interface TenderParticipantDetails {
   organization: Organization;
   creator: User;
   pay_order: PayOrder;
+  performance_security: PerformanceSecurity | null;
 }
