@@ -71,6 +71,7 @@ pub fn run() {
             commands::pay_order_commands::release_pay_order_command,
             commands::performance_security_commands::add_performance_security_command,
             commands::performance_security_commands::release_performance_security_command,
+            commands::units_command::create_new_unit_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

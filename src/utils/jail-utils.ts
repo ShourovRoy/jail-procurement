@@ -2,7 +2,6 @@
 
 import { GlobalRes } from "@/definitions/global-definition";
 import { JailsDataRes } from "@/definitions/jail-definitions";
-import { sleep } from "@/helpers/sleep-helper";
 import { invoke } from "@tauri-apps/api/core";
 
 // Create jail input interface

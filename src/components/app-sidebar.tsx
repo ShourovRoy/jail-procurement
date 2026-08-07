@@ -69,12 +69,12 @@ const data = {
     // food management
     {
       title: "Food Management",
-      url: "#",
+      url: "/food-management",
       icon: <BotIcon />,
       items: [
         {
           title: "Create New Unit",
-          url: "#",
+          url: "/food-management/create-new-unit",
         },
         {
           title: "Available Units",

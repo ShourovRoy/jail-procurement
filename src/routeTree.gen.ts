@@ -12,11 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as dashboardRouteRouteImport } from './routes/(dashboard)/route'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as dashboardIndexRouteImport } from './routes/(dashboard)/index'
+import { Route as dashboardFoodManagementRouteRouteImport } from './routes/(dashboard)/food-management/route'
 import { Route as dashboardJailRouteRouteImport } from './routes/(dashboard)/jail/route'
 import { Route as dashboardOrganizationRouteRouteImport } from './routes/(dashboard)/organization/route'
 import { Route as dashboardTendersRouteRouteImport } from './routes/(dashboard)/tenders/route'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
+import { Route as dashboardFoodManagementIndexRouteImport } from './routes/(dashboard)/food-management/index'
+import { Route as dashboardFoodManagementCreateNewUnitRouteImport } from './routes/(dashboard)/food-management/create-new-unit'
 import { Route as dashboardJailIndexRouteImport } from './routes/(dashboard)/jail/index'
 import { Route as dashboardJailCreateNewJailRouteImport } from './routes/(dashboard)/jail/create-new-jail'
 import { Route as dashboardJailViewAllJailsRouteImport } from './routes/(dashboard)/jail/view-all-jails'
@@ -44,6 +47,12 @@ const dashboardIndexRoute = dashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => dashboardRouteRoute,
 } as any)
+const dashboardFoodManagementRouteRoute =
+  dashboardFoodManagementRouteRouteImport.update({
+    id: '/food-management',
+    path: '/food-management',
+    getParentRoute: () => dashboardRouteRoute,
+  } as any)
 const dashboardJailRouteRoute = dashboardJailRouteRouteImport.update({
   id: '/jail',
   path: '/jail',
@@ -70,6 +79,18 @@ const AuthSignupRoute = AuthSignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const dashboardFoodManagementIndexRoute =
+  dashboardFoodManagementIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => dashboardFoodManagementRouteRoute,
+  } as any)
+const dashboardFoodManagementCreateNewUnitRoute =
+  dashboardFoodManagementCreateNewUnitRouteImport.update({
+    id: '/create-new-unit',
+    path: '/create-new-unit',
+    getParentRoute: () => dashboardFoodManagementRouteRoute,
+  } as any)
 const dashboardJailIndexRoute = dashboardJailIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -143,18 +164,21 @@ const dashboardTendersTenderDetailsIdAddParticipantsRoute =
 
 export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
+  '/food-management': typeof dashboardFoodManagementRouteRouteWithChildren
   '/jail': typeof dashboardJailRouteRouteWithChildren
   '/organization': typeof dashboardOrganizationRouteRouteWithChildren
   '/tenders': typeof dashboardTendersRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/': typeof dashboardIndexRoute
+  '/food-management/create-new-unit': typeof dashboardFoodManagementCreateNewUnitRoute
   '/jail/create-new-jail': typeof dashboardJailCreateNewJailRoute
   '/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
   '/organization/create-new-organization': typeof dashboardOrganizationCreateNewOrganizationRoute
   '/organization/view-all-organizations': typeof dashboardOrganizationViewAllOrganizationsRoute
   '/tenders/create-new-tender': typeof dashboardTendersCreateNewTenderRoute
   '/tenders/view-tenders': typeof dashboardTendersViewTendersRoute
+  '/food-management/': typeof dashboardFoodManagementIndexRoute
   '/jail/': typeof dashboardJailIndexRoute
   '/organization/': typeof dashboardOrganizationIndexRoute
   '/tenders/': typeof dashboardTendersIndexRoute
@@ -167,12 +191,14 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/': typeof dashboardIndexRoute
+  '/food-management/create-new-unit': typeof dashboardFoodManagementCreateNewUnitRoute
   '/jail/create-new-jail': typeof dashboardJailCreateNewJailRoute
   '/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
   '/organization/create-new-organization': typeof dashboardOrganizationCreateNewOrganizationRoute
   '/organization/view-all-organizations': typeof dashboardOrganizationViewAllOrganizationsRoute
   '/tenders/create-new-tender': typeof dashboardTendersCreateNewTenderRoute
   '/tenders/view-tenders': typeof dashboardTendersViewTendersRoute
+  '/food-management': typeof dashboardFoodManagementIndexRoute
   '/jail': typeof dashboardJailIndexRoute
   '/organization': typeof dashboardOrganizationIndexRoute
   '/tenders': typeof dashboardTendersIndexRoute
@@ -184,18 +210,21 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(dashboard)': typeof dashboardRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
+  '/(dashboard)/food-management': typeof dashboardFoodManagementRouteRouteWithChildren
   '/(dashboard)/jail': typeof dashboardJailRouteRouteWithChildren
   '/(dashboard)/organization': typeof dashboardOrganizationRouteRouteWithChildren
   '/(dashboard)/tenders': typeof dashboardTendersRouteRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/(dashboard)/': typeof dashboardIndexRoute
+  '/(dashboard)/food-management/create-new-unit': typeof dashboardFoodManagementCreateNewUnitRoute
   '/(dashboard)/jail/create-new-jail': typeof dashboardJailCreateNewJailRoute
   '/(dashboard)/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
   '/(dashboard)/organization/create-new-organization': typeof dashboardOrganizationCreateNewOrganizationRoute
   '/(dashboard)/organization/view-all-organizations': typeof dashboardOrganizationViewAllOrganizationsRoute
   '/(dashboard)/tenders/create-new-tender': typeof dashboardTendersCreateNewTenderRoute
   '/(dashboard)/tenders/view-tenders': typeof dashboardTendersViewTendersRoute
+  '/(dashboard)/food-management/': typeof dashboardFoodManagementIndexRoute
   '/(dashboard)/jail/': typeof dashboardJailIndexRoute
   '/(dashboard)/organization/': typeof dashboardOrganizationIndexRoute
   '/(dashboard)/tenders/': typeof dashboardTendersIndexRoute
@@ -207,18 +236,21 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/auth'
+    | '/food-management'
     | '/jail'
     | '/organization'
     | '/tenders'
     | '/auth/login'
     | '/auth/signup'
     | '/'
+    | '/food-management/create-new-unit'
     | '/jail/create-new-jail'
     | '/jail/view-all-jails'
     | '/organization/create-new-organization'
     | '/organization/view-all-organizations'
     | '/tenders/create-new-tender'
     | '/tenders/view-tenders'
+    | '/food-management/'
     | '/jail/'
     | '/organization/'
     | '/tenders/'
@@ -231,12 +263,14 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/signup'
     | '/'
+    | '/food-management/create-new-unit'
     | '/jail/create-new-jail'
     | '/jail/view-all-jails'
     | '/organization/create-new-organization'
     | '/organization/view-all-organizations'
     | '/tenders/create-new-tender'
     | '/tenders/view-tenders'
+    | '/food-management'
     | '/jail'
     | '/organization'
     | '/tenders'
@@ -247,18 +281,21 @@ export interface FileRouteTypes {
     | '__root__'
     | '/(dashboard)'
     | '/auth'
+    | '/(dashboard)/food-management'
     | '/(dashboard)/jail'
     | '/(dashboard)/organization'
     | '/(dashboard)/tenders'
     | '/auth/login'
     | '/auth/signup'
     | '/(dashboard)/'
+    | '/(dashboard)/food-management/create-new-unit'
     | '/(dashboard)/jail/create-new-jail'
     | '/(dashboard)/jail/view-all-jails'
     | '/(dashboard)/organization/create-new-organization'
     | '/(dashboard)/organization/view-all-organizations'
     | '/(dashboard)/tenders/create-new-tender'
     | '/(dashboard)/tenders/view-tenders'
+    | '/(dashboard)/food-management/'
     | '/(dashboard)/jail/'
     | '/(dashboard)/organization/'
     | '/(dashboard)/tenders/'
@@ -295,6 +332,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof dashboardIndexRouteImport
       parentRoute: typeof dashboardRouteRoute
     }
+    '/(dashboard)/food-management': {
+      id: '/(dashboard)/food-management'
+      path: '/food-management'
+      fullPath: '/food-management'
+      preLoaderRoute: typeof dashboardFoodManagementRouteRouteImport
+      parentRoute: typeof dashboardRouteRoute
+    }
     '/(dashboard)/jail': {
       id: '/(dashboard)/jail'
       path: '/jail'
@@ -329,6 +373,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/signup'
       preLoaderRoute: typeof AuthSignupRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/(dashboard)/food-management/': {
+      id: '/(dashboard)/food-management/'
+      path: '/'
+      fullPath: '/food-management/'
+      preLoaderRoute: typeof dashboardFoodManagementIndexRouteImport
+      parentRoute: typeof dashboardFoodManagementRouteRoute
+    }
+    '/(dashboard)/food-management/create-new-unit': {
+      id: '/(dashboard)/food-management/create-new-unit'
+      path: '/create-new-unit'
+      fullPath: '/food-management/create-new-unit'
+      preLoaderRoute: typeof dashboardFoodManagementCreateNewUnitRouteImport
+      parentRoute: typeof dashboardFoodManagementRouteRoute
     }
     '/(dashboard)/jail/': {
       id: '/(dashboard)/jail/'
@@ -417,6 +475,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface dashboardFoodManagementRouteRouteChildren {
+  dashboardFoodManagementCreateNewUnitRoute: typeof dashboardFoodManagementCreateNewUnitRoute
+  dashboardFoodManagementIndexRoute: typeof dashboardFoodManagementIndexRoute
+}
+
+const dashboardFoodManagementRouteRouteChildren: dashboardFoodManagementRouteRouteChildren =
+  {
+    dashboardFoodManagementCreateNewUnitRoute:
+      dashboardFoodManagementCreateNewUnitRoute,
+    dashboardFoodManagementIndexRoute: dashboardFoodManagementIndexRoute,
+  }
+
+const dashboardFoodManagementRouteRouteWithChildren =
+  dashboardFoodManagementRouteRoute._addFileChildren(
+    dashboardFoodManagementRouteRouteChildren,
+  )
+
 interface dashboardJailRouteRouteChildren {
   dashboardJailCreateNewJailRoute: typeof dashboardJailCreateNewJailRoute
   dashboardJailViewAllJailsRoute: typeof dashboardJailViewAllJailsRoute
@@ -475,6 +550,7 @@ const dashboardTendersRouteRouteWithChildren =
   )
 
 interface dashboardRouteRouteChildren {
+  dashboardFoodManagementRouteRoute: typeof dashboardFoodManagementRouteRouteWithChildren
   dashboardJailRouteRoute: typeof dashboardJailRouteRouteWithChildren
   dashboardOrganizationRouteRoute: typeof dashboardOrganizationRouteRouteWithChildren
   dashboardTendersRouteRoute: typeof dashboardTendersRouteRouteWithChildren
@@ -483,6 +559,8 @@ interface dashboardRouteRouteChildren {
 }
 
 const dashboardRouteRouteChildren: dashboardRouteRouteChildren = {
+  dashboardFoodManagementRouteRoute:
+    dashboardFoodManagementRouteRouteWithChildren,
   dashboardJailRouteRoute: dashboardJailRouteRouteWithChildren,
   dashboardOrganizationRouteRoute: dashboardOrganizationRouteRouteWithChildren,
   dashboardTendersRouteRoute: dashboardTendersRouteRouteWithChildren,
