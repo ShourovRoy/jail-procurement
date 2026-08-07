@@ -5,4 +5,5 @@ pub mod pay_order_model;
 pub mod performance_security_model;
 pub mod tender_model;
 pub mod tender_participant_model;
+pub mod unit_model;
 pub mod user_model;

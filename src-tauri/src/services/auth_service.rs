@@ -38,7 +38,6 @@ pub async fn login_user_service(
             status_code: 401,
         })?;
 
-
     // compare the password
     if let Err(pass_err) = verify_password(payload.password, &user.password_hash).await {
         return Err(pass_err);

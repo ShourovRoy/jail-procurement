@@ -1,6 +1,7 @@
 // all unit utils will be here
 
 import { GlobalRes } from "@/definitions/global-definition";
+import { UnitsDataRes } from "@/definitions/unit-definitions";
 import { invoke } from "@tauri-apps/api/core";
 
 // create new unit input
@@ -20,6 +21,19 @@ export const createNewUnitUtilCommand = async (
   }).catch((err): GlobalRes<null> => {
     return err;
   });
+
+  return res;
+};
+
+// get all units util
+export const getAllUnitsCommand = async (): Promise<
+  GlobalRes<UnitsDataRes<string> | null>
+> => {
+  const res = await invoke<GlobalRes<UnitsDataRes<string>>>("get_all_units_command").catch(
+    (err): GlobalRes<null> => {
+      return err;
+    },
+  );
 
   return res;
 };

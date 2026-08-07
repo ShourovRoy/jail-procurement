@@ -23,9 +23,6 @@ export const Route = createFileRoute(
 });
 
 function RouteComponent() {
-  // get query client
-  const { queryClient } = Route.useRouteContext();
-
   //   unit form
   const unitForm = useForm({
     defaultValues: {

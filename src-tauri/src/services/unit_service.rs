@@ -7,7 +7,10 @@ use tauri::Wry;
 use tauri_plugin_store::Store;
 
 use crate::{
-    domain::{inputs::unit_inputs::CreateUnitInput, models::global_model::ErrorModel},
+    domain::{
+        inputs::unit_inputs::CreateUnitInput,
+        models::{global_model::ErrorModel, unit_model::UnitWithCreator},
+    },
     helpers::token_helper::retrive_verify_user_helper,
 };
 
@@ -71,4 +74,32 @@ pub async fn create_new_unit_service(
     }
 
     Ok("Unit has been created.".to_string())
+}
+
+// list all units service
+pub async fn list_all_units_service(
+    db_pool: &PgPool,
+    _auth_store: Arc<Store<Wry>>,
+    _secret: &str,
+) -> Result<Vec<UnitWithCreator<String>>, ErrorModel> {
+    let q = "
+        SELECT
+            u.id,
+            u.name,
+            u.short_name,
+            u.created_by,
+            COALESCE(creator.username, '') AS creator
+        FROM units AS u
+        LEFT JOIN users AS creator ON u.created_by = creator.id
+    ";
+
+    let units = sqlx::query_as::<_, UnitWithCreator<String>>(q)
+        .fetch_all(db_pool)
+        .await
+        .map_err(|_err| ErrorModel {
+            error_message: "Unable to query the units!".to_string(),
+            status_code: 500,
+        })?;
+
+    Ok(units)
 }

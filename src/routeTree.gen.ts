@@ -19,6 +19,7 @@ import { Route as dashboardTendersRouteRouteImport } from './routes/(dashboard)/
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as dashboardFoodManagementIndexRouteImport } from './routes/(dashboard)/food-management/index'
+import { Route as dashboardFoodManagementCreateNewProductRouteImport } from './routes/(dashboard)/food-management/create-new-product'
 import { Route as dashboardFoodManagementCreateNewUnitRouteImport } from './routes/(dashboard)/food-management/create-new-unit'
 import { Route as dashboardJailIndexRouteImport } from './routes/(dashboard)/jail/index'
 import { Route as dashboardJailCreateNewJailRouteImport } from './routes/(dashboard)/jail/create-new-jail'
@@ -83,6 +84,12 @@ const dashboardFoodManagementIndexRoute =
   dashboardFoodManagementIndexRouteImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => dashboardFoodManagementRouteRoute,
+  } as any)
+const dashboardFoodManagementCreateNewProductRoute =
+  dashboardFoodManagementCreateNewProductRouteImport.update({
+    id: '/create-new-product',
+    path: '/create-new-product',
     getParentRoute: () => dashboardFoodManagementRouteRoute,
   } as any)
 const dashboardFoodManagementCreateNewUnitRoute =
@@ -171,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/': typeof dashboardIndexRoute
+  '/food-management/create-new-product': typeof dashboardFoodManagementCreateNewProductRoute
   '/food-management/create-new-unit': typeof dashboardFoodManagementCreateNewUnitRoute
   '/jail/create-new-jail': typeof dashboardJailCreateNewJailRoute
   '/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
@@ -191,6 +199,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/': typeof dashboardIndexRoute
+  '/food-management/create-new-product': typeof dashboardFoodManagementCreateNewProductRoute
   '/food-management/create-new-unit': typeof dashboardFoodManagementCreateNewUnitRoute
   '/jail/create-new-jail': typeof dashboardJailCreateNewJailRoute
   '/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
@@ -217,6 +226,7 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/(dashboard)/': typeof dashboardIndexRoute
+  '/(dashboard)/food-management/create-new-product': typeof dashboardFoodManagementCreateNewProductRoute
   '/(dashboard)/food-management/create-new-unit': typeof dashboardFoodManagementCreateNewUnitRoute
   '/(dashboard)/jail/create-new-jail': typeof dashboardJailCreateNewJailRoute
   '/(dashboard)/jail/view-all-jails': typeof dashboardJailViewAllJailsRoute
@@ -243,6 +253,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/signup'
     | '/'
+    | '/food-management/create-new-product'
     | '/food-management/create-new-unit'
     | '/jail/create-new-jail'
     | '/jail/view-all-jails'
@@ -263,6 +274,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/signup'
     | '/'
+    | '/food-management/create-new-product'
     | '/food-management/create-new-unit'
     | '/jail/create-new-jail'
     | '/jail/view-all-jails'
@@ -288,6 +300,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/signup'
     | '/(dashboard)/'
+    | '/(dashboard)/food-management/create-new-product'
     | '/(dashboard)/food-management/create-new-unit'
     | '/(dashboard)/jail/create-new-jail'
     | '/(dashboard)/jail/view-all-jails'
@@ -379,6 +392,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/food-management/'
       preLoaderRoute: typeof dashboardFoodManagementIndexRouteImport
+      parentRoute: typeof dashboardFoodManagementRouteRoute
+    }
+    '/(dashboard)/food-management/create-new-product': {
+      id: '/(dashboard)/food-management/create-new-product'
+      path: '/create-new-product'
+      fullPath: '/food-management/create-new-product'
+      preLoaderRoute: typeof dashboardFoodManagementCreateNewProductRouteImport
       parentRoute: typeof dashboardFoodManagementRouteRoute
     }
     '/(dashboard)/food-management/create-new-unit': {
@@ -476,12 +496,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface dashboardFoodManagementRouteRouteChildren {
+  dashboardFoodManagementCreateNewProductRoute: typeof dashboardFoodManagementCreateNewProductRoute
   dashboardFoodManagementCreateNewUnitRoute: typeof dashboardFoodManagementCreateNewUnitRoute
   dashboardFoodManagementIndexRoute: typeof dashboardFoodManagementIndexRoute
 }
 
 const dashboardFoodManagementRouteRouteChildren: dashboardFoodManagementRouteRouteChildren =
   {
+    dashboardFoodManagementCreateNewProductRoute:
+      dashboardFoodManagementCreateNewProductRoute,
     dashboardFoodManagementCreateNewUnitRoute:
       dashboardFoodManagementCreateNewUnitRoute,
     dashboardFoodManagementIndexRoute: dashboardFoodManagementIndexRoute,

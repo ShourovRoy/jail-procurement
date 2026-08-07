@@ -29,8 +29,6 @@ pub async fn verify_password(password: String, pwd_hash: &str) -> Result<bool, E
         error_message: "Unable to parse password! Contact support.".to_string(),
     })?;
     if let Err(_err) = argon_hasher.verify_password(password.as_bytes(), &parsed_hash) {
-        
-        
         return Err(ErrorModel {
             status_code: 401,
             error_message: "Invalid credientials!".to_string(),

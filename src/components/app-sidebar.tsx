@@ -81,8 +81,8 @@ const data = {
           url: "#",
         },
         {
-          title: "Create New Food",
-          url: "#",
+          title: "Create New Product",
+          url: "/food-management/create-new-product",
         },
         {
           title: "Available Food Items",
