@@ -3,6 +3,7 @@ pub mod login_input;
 pub mod organization_inputs;
 pub mod pay_order_inputs;
 pub mod performance_security_inputs;
+pub mod products_input;
 pub mod signup_input;
 pub mod tender_inputs;
 pub mod tender_participant_inputs;
