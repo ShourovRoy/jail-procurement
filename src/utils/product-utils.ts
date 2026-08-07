@@ -1,3 +1,5 @@
+// all products utils will be defined here
+
 import { GlobalRes } from "@/definitions/global-definition";
 import { invoke } from "@tauri-apps/api/core";
 
